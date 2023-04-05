@@ -16,7 +16,7 @@ class User(db.Model):
     date_created = db.Column(db.Date)
 
     def __repr__(self):
-        return f"<User: {self.user_name} member since: {self.created_at}>"  
+        return f"<User: {self.user_name} member since: {self.date_created}>"  
     
 class Outfit(db.Model):
     """A User created outfit"""

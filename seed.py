@@ -24,3 +24,4 @@ for n in range(5):
     model.db.session.add(user)
 
 model.db.session.commit()
+
