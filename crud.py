@@ -13,9 +13,18 @@ def create_user(user_name, user_password, fname, lname, email):
     
     return user
 
-def create_new_outfit(outfit_name, public, notes, user_id, character_id):
-
 # Create a new outfit > req: select character, name | opt: add to new collectiomn, add to existing collection
+# def create_new_outfit(outfit_name, public, notes, character_id):
+#     """"Creating a new outfit"""
+
+#     date_created = date.today().strftime("%b-%d-%Y")
+#     user_id = db.session.query(User.user_id)
+
+#     outfit = model.Outfit(outfit_name=outfit_name, public=(public="pulic"), notes=notes, user_ )
+
+
+
+
 # Create new collection > req: select public status, name
 # Update existing outfit > change name, add/remove collection, delete outfit, add/remove items
 # Update collection > add/remove outfit, change name, change public status, delete collection

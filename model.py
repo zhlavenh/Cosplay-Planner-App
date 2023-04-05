@@ -28,6 +28,8 @@ class Outfit(db.Model):
     public = db.Column(db.Boolean, nullable=False, default=True)
     notes = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    date_created = db.Column(db.Date)
+    last_updated = db.Column(db.Date)
     character_id = db.Column(db.Integer, db.ForeignKey('characters.character_id'))
     collection_id = db.relationship('Collection', secondary='collection_outfits', backref=('outfits'))
 
@@ -43,6 +45,8 @@ class Collection(db.Model):
     collection_name = db.Column(db.String(40), nullable=False)
     public = db.Column(db.Boolean, nullable=False, default=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    date_created = db.Column(db.Date)
+    last_updated = db.Column(db.Date)
     outfit_id = db.relationship('Outfit', secondary='collection_outfits', backref=('collections'))
 
     def __repr__(self):
