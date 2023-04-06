@@ -1,9 +1,23 @@
-function Hello(){
+function NewUser(){
     return (
-        <h1>This is the login page</h1>
+     <h1>You need an account</h1>
     );
 }
 
+function ExistUser(){
+    return(<h1>you already exist</h1>);
+}
 
-console.log(Hello);
-ReactDOM.render(<Hello />, document.getElementById("login"));
+function UserStatus(){
+    const [status, getStatus] = React.useState("new");
+
+    function setStatus(){
+        if (status === "new"){getStatus("old");}
+        else{getStatus("new");}
+    }
+
+    return(
+        <button id="userStatus" type="button" onClick={setStatus}>Current status is: {status}</button>
+    );
+}
+ReactDOM.render(<UserStatus />, document.getElementById("login"));
