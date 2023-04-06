@@ -23,5 +23,10 @@ def nav_user_outfits():
 
     return render_template("outfits.html")
 
+@app.route('/login')
+def nav_login():
+
+    return render_template("login.html")
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

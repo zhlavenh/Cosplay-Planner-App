@@ -7,6 +7,7 @@ function Header(){
             </button>
             <div className="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
                 <div className="navbar-nav">
+                <a className="nav-item nav-link" href="/login">Login</a>
                 <a className="nav-item nav-link" href="/user_account">My Account</a>
                 <a className="nav-item nav-link" href="/user_collections">Collections</a>
                 <a className="nav-item nav-link" href="/user_outfits">Outfits</a>
