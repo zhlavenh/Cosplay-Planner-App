@@ -67,17 +67,16 @@ function UserRedir(props){
 
     return(
         <React.Fragment>
-            
             <div className="d-flex justify-content-center">
                 <button type="button" /*onClick={setForm}*/ className="create_acct" style={{background: 'none', border: 'none'}}>Forgot User Name?</button>
                 <button type="button" /*onClick={setForm}*/ className="create_acct" style={{background: 'none', border: 'none'}}>Forgot Password?</button>
-            </div>
+            </div><br/>
             <div className="d-flex justify-content-center">
                 <p style={{margin: "0em"}}>{props.prompt.introText}</p>
                 <button type="button" onClick={props.changeText} className="create_acct" style={{background: 'none', border: 'none'}}>{props.prompt.buttonText}</button>
-            </div>
+            </div><br/>
             <div className="d-flex justify-content-center">
-                <button onChange={props.changeForm} className="btn btn-outline-primary" id="userStatus" type="button" /*onChange={props.changeText}*/ /*onClick={props.setStatus}*/>{props.prompt.status}</button>
+                <button onChange={props.changeForm} className="btn btn-outline-primary" id="userStatus" type="button" /*onChange={props.changeText}*/>{props.prompt.status}</button>
             </div>
         </React.Fragment>
 
@@ -85,8 +84,6 @@ function UserRedir(props){
 }
 
 function UserStatus(){
-    const [userForm, getForm] = React.useState(ExistUserForm)
-    
     const initalText ={buttonText: "Create an account.", introText: "New to CP?", status: "Login", currentform: ExistUserForm()}
     const [prompt, getText] = React.useState(initalText)
 
@@ -100,8 +97,6 @@ function UserStatus(){
         }
     }
     
-
-
     return(
         <form>
             {prompt.currentform}
