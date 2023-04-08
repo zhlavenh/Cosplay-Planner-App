@@ -28,5 +28,13 @@ def nav_login():
 
     return render_template("login.html")
 
+@app.route('/characters')
+def nav_character():
+    return render_template("characters.html")
+
+@app.route('/shows')
+def nav_show():
+    return render_template("shows.html")
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

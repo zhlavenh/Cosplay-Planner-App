@@ -2,6 +2,7 @@
 
 import os
 import json
+from random import choice, randint
 
 import crud
 import model
@@ -30,7 +31,9 @@ anime_shows = {
     "Mabinogi":, {"english_title": "Mabinogi", "japanese_title": "マビノギ", "air_date": "2007/12/00"}
 }
 
-# Seeding data
+# Seeding data'
+
+# Create user
 for n in range(5):
     user_name = f"UserName{n}"
     user_password = "test"
@@ -42,4 +45,9 @@ for n in range(5):
     model.db.session.add(user)
 
 model.db.session.commit()
+
+# create an outfit (Choose random charcter from list for seed)
+# Create a collection
+
+    
 

@@ -28,8 +28,8 @@ class Outfit(db.Model):
     public = db.Column(db.Boolean, nullable=False, default=True)
     notes = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    date_created = db.Column(db.Date)
-    last_updated = db.Column(db.Date)
+    date_created = db.Column(db.Date, nullable=False)
+    last_updated = db.Column(db.Date, nullable=False)
     character_id = db.Column(db.Integer, db.ForeignKey('characters.character_id'))
     collection_id = db.relationship('Collection', secondary='collection_outfits', backref=('outfits'))
 
@@ -67,7 +67,7 @@ class Character(db.Model):
     __tablename__ = "characters"
 
     character_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    character_image_id = db.Column(db.Integer, nullable=False)
+    character_image_id = db.Column(db.Integer)
     character_name = db.Column(db.String(30), nullable=False)
     gender = db.Column(db.String(1))
     show_id = db.Column(db.Integer, db.ForeignKey('shows.show_id'))
