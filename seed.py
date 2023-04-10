@@ -2,7 +2,8 @@
 
 import os
 import json
-from random import choice, randint
+from random import choice, sample, randint
+from seed_api import *
 
 import crud
 import model
@@ -16,20 +17,7 @@ model.db.create_all()
 
 # Sample data to feed seed mirror api data
 
-anime_characters = {
-    "Akeno Himejima": {"show_title": "High School DxD", "imgage_id": 0, "name": "Akeno Himejima", "gender": "F"},
-    "Wendy Marvell": {"show_title": "Fairy Tail", "image_id": 1, "name": "Wendy Marvell", "gender": "F"},
-    "Natsu Dragneel": {"show_title": "Fairy Tail", "image_id": 3, "name": "Natsu Dragneel", "gender": "M"},
-    "Padan": {"show_title": "Mabinogi", "image_id": 4, "name": "Padan", "gender": "M"}
-    "Lio Shirazumi": {"show_title": "Kara No Kyoukai: The Garden of Sinners", "image_id": 5, "name": "Lio Shirazumi", "gender": "X"}
-}
 
-anime_shows = {
-    "Kara No Kyoukai: The Garden of Sinners": {"english_title": "Kara No Kyoukai: The Garden of Sinners", "japanese_title": "空の境界", "air_date": "2007/12/01"},
-    "High School DxD": {"english_title": "High School DxD", "japanese_title": "ハイスクールD×D", "air_date": "2012/01/06"},
-    "Fairy Tail": {"english_title": "Fairy Tail", "japanese_title": "FAIRY TAIL", "air_date": "2009/10/12"},
-    "Mabinogi": {"english_title": "Mabinogi", "japanese_title": "マビノギ", "air_date": "2007/12/00"}
-}
 
 # Seeding data'
 
@@ -47,6 +35,16 @@ for n in range(5):
 model.db.session.commit()
 
 # create an outfit (Choose random charcter from list for seed)
+for n in range(5):
+    outfit_name = f"Test Outfit #{n}"
+    public = choice([True, False])
+    collection = choice([True, False])
+    notes = "".join(sample(test_notes, k=50))
+    character_id = crud.find_character(choice([x for x in anime_characters.keys()]))
+    outfit = crud.create_new_outfit(outfit_name, public, notes, character_id, collection)
+    model.db.session.add(outfit)
+model.db.session.commit()
+
 
 
 # Create a collection

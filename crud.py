@@ -2,6 +2,9 @@
 
 import model
 from datetime import date
+from seed_api import *
+
+
 
 def create_user(user_name, user_password, fname, lname, email):
     """Create a new user."""
@@ -13,11 +16,38 @@ def create_user(user_name, user_password, fname, lname, email):
     
     return user
 
+def find_show(name_of_show):
+    show_in_db = model.db.session.query(model.Show).filter(model.Show.english_title == name_of_show).first()
+    if show_in_db == None:
+        #This is where it will search api and gather informaiton on show
+        show_info = anime_shows[name_of_show]
+        show_to_db = model.Show(english_title=name_of_show, japanese_title=show_info["japanese_title"])
+        model.db.session.add(show_to_db)
+        model.db.session.commit()
+        show_in_db = model.db.session.query(model.Show).filter(model.Show.english_title == name_of_show).first()
+        return show_in_db.show_id
+    else:
+        return show_in_db.show_id
+
 def find_character(name_of_character):
-    # First search api to see if chacter exist
-    # If character is in database return character id
-    # Else create new character entry into database 
-    if db.session.query(Character).filter(Character.character_name == name_of_character)
+#     # First search api to see if chacter exist
+#     # If character is in database return character id
+#     # Else create new character entry into database 
+    character_in_db = model.db.session.query(model.Character).filter(model.Character.character_name == name_of_character).first()
+
+    if character_in_db == None:
+        # This is where it is searching the api and getting information on character
+        character_info = anime_characters[name_of_character]
+    
+        show_id = find_show(character_info["show_title"])
+        character_to_db = model.Character(character_name=name_of_character, gender=character_info["gender"], show_id=show_id)
+        model.db.session.add(character_to_db)
+        model.db.session.commit()
+        character_in_db = model.db.session.query(model.Character).filter(model.Character.character_name == name_of_character).first()
+        return character_in_db.character_id
+
+    else:
+        return character_in_db.character_id
 
 
 # Create a new outfit > req: select character, name | opt: add to new collection, add to existing collection, from drop down list
@@ -28,19 +58,13 @@ def create_new_outfit(outfit_name, public, notes, character_id, collection=False
     notes = notes
     date_created = date.today().strftime("%b-%d-%Y")
     # Default is the inital creation date
-    last_updated = date_created
-
     # Using this for seeding production would come from flask session
-    user_id = db.session.query(User.user_id).all()
-    # Character id =
+    # user_id = model.db.session.query(User.user_id).all()
 
+    # Drop down list that will return the chracter id only. this code below will change for that.
 
-    # User selection colleciton action
-    if collection == "new collection":
-        # Prompt user for name of collection
-            # create_new_collection(collection_name, public) return collection_id
-
-    outfit = model.Outfit(outfit_name=outfit_name, public=(public="pulic"), notes=notes, user_ )
+    outfit = model.Outfit(outfit_name=outfit_name, public=(public=="pulic"), notes=notes, date_created=date_created, last_updated=date_created, character_id=character_id)
+    return outfit
 
 
 

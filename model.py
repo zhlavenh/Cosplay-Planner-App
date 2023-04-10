@@ -68,7 +68,7 @@ class Character(db.Model):
 
     character_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     character_image_id = db.Column(db.Integer)
-    character_name = db.Column(db.String(30), nullable=False)
+    character_name = db.Column(db.String(50), nullable=False)
     gender = db.Column(db.String(1))
     show_id = db.Column(db.Integer, db.ForeignKey('shows.show_id'))
     english_voice_actor = db.Column(db.String(30))
@@ -112,10 +112,10 @@ class Show(db.Model):
     show_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     english_title = db.Column(db.String(40), nullable=False)
     japanese_title = db.Column(db.String(40), nullable=False)
-    air_date = db.Column(db.Date, nullable=False)
+    air_date = db.Column(db.Date)
 
     def __repr__(self):
-        return f"<Shop name: {self.shop_name}>"
+        return f"<Show engliss title: {self.english_title}>"
 
 
 def connect_to_db(app):
