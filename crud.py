@@ -54,22 +54,27 @@ def find_character(name_of_character):
 def create_new_outfit(outfit_name, public, notes, character_id, collection=False):
     """"Creating a new outfit"""
 
-    public = public
-    notes = notes
     date_created = date.today().strftime("%b-%d-%Y")
     # Default is the inital creation date
     # Using this for seeding production would come from flask session
     # user_id = model.db.session.query(User.user_id).all()
+    # Character_id will come from find_charcter function from api.
 
-    # Drop down list that will return the chracter id only. this code below will change for that.
-
-    outfit = model.Outfit(outfit_name=outfit_name, public=(public=="pulic"), notes=notes, date_created=date_created, last_updated=date_created, character_id=character_id)
+    outfit = model.Outfit(outfit_name=outfit_name, public=public, notes=notes, date_created=date_created, last_updated=date_created, character_id=character_id)
     return outfit
+
+# Create new collection > req: select public status, name
+def create_empty_collection(collection_name, public, outfit_id=None):
+    """Create an empty collection"""
+    
+    date_created = date.today().strftime("%b-%d-%Y")
+
+    collection = model.Collection(collection_name=collection_name, public=public, date_created=date_created, last_updated=date_created)
+    return collection
 
 
 
 # Button on character page to crete outfit based using character name.
-# Create new collection > req: select public status, name
 # Update existing outfit > change name, add/remove collection, delete outfit, add/remove items
 # Update collection > add/remove outfit, change name, change public status, delete collection
 
