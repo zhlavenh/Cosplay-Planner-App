@@ -28,7 +28,7 @@ anime_shows = {
     "Kara No Kyoukai: The Garden of Sinners": {"english_title": "Kara No Kyoukai: The Garden of Sinners", "japanese_title": "空の境界", "air_date": "2007/12/01"},
     "High School DxD": {"english_title": "High School DxD", "japanese_title": "ハイスクールD×D", "air_date": "2012/01/06"},
     "Fairy Tail": {"english_title": "Fairy Tail", "japanese_title": "FAIRY TAIL", "air_date": "2009/10/12"},
-    "Mabinogi":, {"english_title": "Mabinogi", "japanese_title": "マビノギ", "air_date": "2007/12/00"}
+    "Mabinogi": {"english_title": "Mabinogi", "japanese_title": "マビノギ", "air_date": "2007/12/00"}
 }
 
 # Seeding data'
@@ -47,6 +47,8 @@ for n in range(5):
 model.db.session.commit()
 
 # create an outfit (Choose random charcter from list for seed)
+
+
 # Create a collection
 
     

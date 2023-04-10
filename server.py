@@ -36,5 +36,9 @@ def nav_character():
 def nav_show():
     return render_template("shows.html")
 
+@app.route('/create')
+def nav_create_page():
+    return render_template("create.html")
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

@@ -13,7 +13,11 @@ def create_user(user_name, user_password, fname, lname, email):
     
     return user
 
-def character_search(character_name):
+def find_character(name_of_character):
+    # First search api to see if chacter exist
+    # If character is in database return character id
+    # Else create new character entry into database 
+    if db.session.query(Character).filter(Character.character_name == name_of_character)
 
 
 # Create a new outfit > req: select character, name | opt: add to new collection, add to existing collection, from drop down list
@@ -28,7 +32,7 @@ def create_new_outfit(outfit_name, public, notes, character_id, collection=False
 
     # Using this for seeding production would come from flask session
     user_id = db.session.query(User.user_id).all()
-    character_id = 
+    # Character id =
 
 
     # User selection colleciton action
