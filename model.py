@@ -71,7 +71,7 @@ class Character(db.Model):
     character_image_id = db.Column(db.Integer)
     character_name = db.Column(db.String(50), nullable=False)
     gender = db.Column(db.String(1))
-    show_id = db.Column(db.Integer, db.ForeignKey('shows.show_id'))
+    show_eng_title = db.Column(db.Integer, db.ForeignKey('shows.english_title'))
     english_voice_actor = db.Column(db.String(30))
     japanese_voice_actor = db.Column(db.String(30))
 

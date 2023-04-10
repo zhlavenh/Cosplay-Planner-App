@@ -85,25 +85,61 @@ def update_outfit(outfit_id, outfit_new_name, add_to_col=False):
 def add_outfit_to_collection(collection):
     return None
 
+def get_all_characters():
+    url = 'https://graphql.anilist.co'
+    query = """
+    query ($page: Int, $perPage: Int) {
+        Page (page: $page, perPage: $perPage) {
+            characters{
+                id
+                name{
+                    full
+                }
+                gender
+                media{
+                    edges{
+                        node{
+                            title{
+                                english
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    """
+
+    variables = {
+        'page': 1,
+        'perPage': 5
+    }
+    return url, query, variables
 def get_all_anime():
     url = 'https://graphql.anilist.co'
     query = """
-    query ($id: Int) { # Define which variables will be used in the query (id)
-    Media (id: $id, type: ANIME) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
-        id
-        title {
-        romaji
-        english
-        native
+    query ($page: Int, $perPage: Int) {
+        Page (page: $page, perPage: $perPage) {
+            media(type:ANIME){
+                title{
+                    english
+                    native
+                }
+                startDate{
+                    year, day, month
+                }
+                coverImage{
+                    medium
+                }
+            }
         }
-    }
     }"""
 
     variables = {
-    'id': 15125
+        'page': 1,
+        'perPage': 5
     }
     return url, query, variables
-
 # Button on character page to crete outfit based using character name.
 
 # Update collection > add/remove outfit, change name, change public status, delete collection

@@ -1,9 +1,5 @@
 function Display(){
-    fetch('/disp_all_anime')
-        .then((response) => response.json())
-        .then((serverData) => {
-            console.log(serverData);
-        });
+
 
 
     return (
