@@ -1,4 +1,11 @@
-function Hello(){
+function Display(){
+    fetch('/disp_all_anime')
+        .then((response) => response.json())
+        .then((serverData) => {
+            console.log(serverData);
+        });
+
+
     return (
         <div>
             <h1>This is the homepage for cosplay planner</h1>
@@ -24,4 +31,4 @@ function Hello(){
     );
 }
 
-ReactDOM.render(<Hello />, document.getElementById("homepage"));
+ReactDOM.render(<Display />, document.getElementById("homepage"));

@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
-
+import graphene
+from graphene_sqlalchemy import  SQLAlchemyObjectType
 db = SQLAlchemy()
 
 class User(db.Model):

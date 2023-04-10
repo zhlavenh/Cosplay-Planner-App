@@ -64,7 +64,7 @@ def create_new_outfit(outfit_name, public, notes, character_id, collection=False
     return outfit
 
 # Create new collection > req: select public status, name
-def create_empty_collection(collection_name, public, outfit_id=None):
+def create_empty_collection(collection_name, public):
     """Create an empty collection"""
     
     date_created = date.today().strftime("%b-%d-%Y")
@@ -72,10 +72,40 @@ def create_empty_collection(collection_name, public, outfit_id=None):
     collection = model.Collection(collection_name=collection_name, public=public, date_created=date_created, last_updated=date_created)
     return collection
 
+# Update existing outfit > change name, add/remove collection, delete outfit, add/remove items
+def update_outfit(outfit_id, outfit_new_name, add_to_col=False):
+    # change name
+    outfit_obj = (model.db.session.query(model.Outfit).filter(model.Outfit.outfit_id == outfit_id).first())
+    create
+    
 
+    # add to existing collection
+    # add to new collection
+    # 
+def add_outfit_to_collection(collection):
+    return None
+
+def get_all_anime():
+    url = 'https://graphql.anilist.co'
+    query = """
+    query ($id: Int) { # Define which variables will be used in the query (id)
+    Media (id: $id, type: ANIME) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
+        id
+        title {
+        romaji
+        english
+        native
+        }
+    }
+    }"""
+
+    variables = {
+    'id': 15125
+    }
+    return url, query, variables
 
 # Button on character page to crete outfit based using character name.
-# Update existing outfit > change name, add/remove collection, delete outfit, add/remove items
+
 # Update collection > add/remove outfit, change name, change public status, delete collection
 
 
