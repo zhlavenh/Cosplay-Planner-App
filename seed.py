@@ -54,6 +54,8 @@ for n in range(5):
     model.db.session.add(outfit)
 model.db.session.commit()
 
+#Add existing outfit to collection> 
+
 
 
 

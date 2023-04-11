@@ -137,7 +137,7 @@ def get_all_anime():
 
     variables = {
         'page': 1,
-        'perPage': 5
+        'perPage': 50
     }
     return url, query, variables
 # Button on character page to crete outfit based using character name.

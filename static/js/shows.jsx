@@ -5,7 +5,7 @@ function ShowCard(props){
     return(
         <React.Fragment>
             <div className="col">
-                <div className="card" style={{width: '10rem'/*, margin: '5px'*/}}>
+                <div className="card" style={{width: '10rem'}}>
                     <div className="card-body">
                         <img className="card-img-top" src={props.show_img} alt="show_title"/>
                         <h5 className="card-title">{props.show_title}</h5>
@@ -42,11 +42,15 @@ function ShowRow(){
     for (let i = 0; i < shows.length ; i++) {
 
         const show_img = shows[i].coverImage.medium;
-        const show_title= shows[i].title.english;
         const japanese_title = shows[i].title.native;
+        let show_title = shows[i].title.english;
+
+        if (show_title == null){
+            show_title = shows[i].title.native;
+        }
 
         content.push(<ShowCard show_img={show_img} show_title={show_title}/>);
-        }
+    }
 
     return content;
     }
@@ -65,6 +69,11 @@ function AllShows(){
         <div className="container">
             <h1>This is a page for all shows</h1>
             <ShowRow/>
+            <div className="row">
+                <button type="button" class="btn btn-primary next_page">Go to previous page</button>
+                <button type="button" class="btn btn-primary next_page">Go to next page</button>
+            </div>
+
         </div>
 
     );
