@@ -29,25 +29,25 @@ def find_show(name_of_show):
     else:
         return show_in_db.show_id
 
-def find_character(name_of_character):
+def db_find_character(name_of_character):
 #     # First search api to see if chacter exist
 #     # If character is in database return character id
 #     # Else create new character entry into database 
     character_in_db = model.db.session.query(model.Character).filter(model.Character.character_name == name_of_character).first()
 
-    if character_in_db == None:
-        # This is where it is searching the api and getting information on character
-        character_info = anime_characters[name_of_character]
+    # if character_in_db == None:
+    #     # This is where it is searching the api and getting information on character
+    #     # character_info = anime_characters[name_of_character]
     
-        show_id = find_show(character_info["show_title"])
-        character_to_db = model.Character(character_name=name_of_character, gender=character_info["gender"], show_id=show_id)
-        model.db.session.add(character_to_db)
-        model.db.session.commit()
-        character_in_db = model.db.session.query(model.Character).filter(model.Character.character_name == name_of_character).first()
-        return character_in_db.character_id
+    #     # show_id = find_show(character_info["show_title"])
+    #     # character_to_db = model.Character(character_name=name_of_character, gender=character_info["gender"], show_id=show_id)
+    #     # model.db.session.add(character_to_db)
+    #     # model.db.session.commit()
+    #     # character_in_db = model.db.session.query(model.Character).filter(model.Character.character_name == name_of_character).first()
+    #     # return character_in_db.character_id
 
-    else:
-        return character_in_db.character_id
+    # else:
+    #     return character_in_db.character_id
 
 
 # Create a new outfit > req: select character, name | opt: add to new collection, add to existing collection, from drop down list
@@ -138,6 +138,26 @@ def get_all_anime():
     variables = {
         'page': 1,
         'perPage': 50
+    }
+    return url, query, variables
+def api_find_character(inputName):
+    url = 'https://graphql.anilist.co'
+    query = """
+    query ($page: Int, $perPage: Int, $search: String) {
+        Page(page: $page, perPage: $perPage){
+            characters (search: $search) {
+                name{
+                    full
+                }
+            }
+        }
+
+    }
+    """
+    variables = {
+        'search': inputName,
+        'page': 1,
+        'perPage': 6
     }
     return url, query, variables
 # Button on character page to crete outfit based using character name.

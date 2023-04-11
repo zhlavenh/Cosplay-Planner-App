@@ -4,17 +4,11 @@ from model import connect_to_db, db
 import crud
 
 app = Flask(__name__)
-
+# Webpages
 @app.route('/')
 def show_homepage():
 
     return render_template("homepage.html")
-
-@app.route('/disp_all_anime')
-def disp_all_anime():
-    url, query, variables = crud.get_all_anime()
-    response = requests.post(url, json={'query': query, 'variables': variables})
-    return response.json()
 
 @app.route('/user_account')
 def nav_user_acct():
@@ -47,6 +41,21 @@ def nav_show():
 @app.route('/create')
 def nav_create_page():
     return render_template("create.html")
+
+# api routes
+@app.route('/disp_all_anime')
+def disp_all_anime():
+    url, query, variables = crud.get_all_anime()
+    response = requests.post(url, json={'query': query, 'variables': variables})
+    return response.json()
+
+@app.route('/find_character', methods=["POST"])
+def disp_all_char_matches():
+    inputName = request.get_json()
+
+    url, query, variables = crud.api_find_character(inputName["name"])
+    response = requests.post(url, json={'query': query, 'variables': variables})
+    return response.json()
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
