@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request, session
+from flask import Flask, render_template, flash, request, session, redirect
 import requests
 from model import connect_to_db, db
 import crud
@@ -54,6 +54,21 @@ def disp_all_char_matches():
     url, query, variables = crud.api_find_character(inputName["name"])
     response = requests.post(url, json={'query': query, 'variables': variables})
     return response.json()
+
+#Sessions handling
+@app.route('/handle-login', methods=['POST'])
+def handle_login():
+    """Log in user"""
+    formType = request.get_json("formType")
+    if formType == "existingUSer":
+        flash("Welcome Back *User's name*")
+        response = {"message": "Successful login"}
+        return response.json()
+    elif formType == "newUser":
+        flash("Glad to have you join CP *User's name*")
+        response = {"message": "Successful account creation"}
+        return response.json()
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

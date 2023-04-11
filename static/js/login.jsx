@@ -68,15 +68,15 @@ function UserRedir(props){
     return(
         <React.Fragment>
             <div className="d-flex justify-content-center">
-                <button type="button" /*onClick={setForm}*/ className="create_acct" style={{background: 'none', border: 'none'}}>Forgot User Name?</button>
-                <button type="button" /*onClick={setForm}*/ className="create_acct" style={{background: 'none', border: 'none'}}>Forgot Password?</button>
+                <button type="button" className="create_acct" style={{background: 'none', border: 'none'}}>Forgot User Name?</button>
+                <button type="button" className="create_acct" style={{background: 'none', border: 'none'}}>Forgot Password?</button>
             </div><br/>
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center userStatusForm">
                 <p style={{margin: "0em"}}>{props.prompt.introText}</p>
                 <button type="button" onClick={props.changeText} className="create_acct" style={{background: 'none', border: 'none'}}>{props.prompt.buttonText}</button>
             </div><br/>
             <div className="d-flex justify-content-center">
-                <button onChange={props.changeForm} className="btn btn-outline-primary" id="userStatus" type="button" /*onChange={props.changeText}*/>{props.prompt.status}</button>
+                <button className="btn btn-outline-primary" id={props.prompt.status} type="" onClick={props.getFormInputs}>{props.prompt.status}</button>
             </div>
         </React.Fragment>
 
@@ -84,8 +84,10 @@ function UserRedir(props){
 }
 
 function UserStatus(){
-    const initalText ={buttonText: "Create an account.", introText: "New to CP?", status: "Login", currentform: ExistUserForm()}
+    const initalText = {buttonText: "Create an account.", introText: "New to CP?", status: "Login", currentform: ExistUserForm()}
+    const initialInputs = {formType: null, user_name: null, user_password: null, valPassword: null, fname: null, lname: null, email: null}
     const [prompt, getText] = React.useState(initalText)
+    const [formInputs, setInputs] = React.useState("empty")
 
     function changeText(evt){
         evt.preventDefault();
@@ -96,11 +98,47 @@ function UserStatus(){
             getText({...prompt, buttonText: "Create an account.", introText: "New to CP?", status: "Log in", currentform: ExistUserForm()});
         }
     }
-    
+
+    function getFormInputs(evt){
+        evt.preventDefault();
+        const currentFormType = evt.target.id;
+        if (currentFormType == "Login"){
+            const userName = document.getElementById("user_name").value;
+            const userPassword = document.getElementById("password").value;
+            setInputs({...initialInputs, formType: "existingUser", user_name: userName, user_password: userPassword});
+            console.log(`after serInputs ${formInputs}`);
+            // setInputs(formInputs["formType"]="existingUser", formInputs["user_name"]=userName, formInputs["user_password"]=userPassword);
+
+        }
+        else if (currentFormType == "Create Account"){
+            const userName = document.getElementById("user_name").value;
+            const userPassword = document.getElementById("password").value;
+            const valPassword = document.getElementById("password2").value;
+            const fName = document.getElementById("fname").value;
+            const lName = document.getElementById("lname").value;
+            const Email = document.getElementById("email").value;
+            setInputs(
+                formInputs["formType"]="newUser", formInputs["user_name"]=userName, formInputs["user_password"]=userPassword,
+                formInputs["valPassword"]=valPassword, formInputs["fname"]=fName, formInputs["lname"]=lName, 
+                formInputs["email"]=Email
+            );
+        }
+    }
+
+    // React.useEffect(()=>{
+    //     fetch('/handle_login',{
+    //         method: 'POST',
+    //         body: JSON.stringify(formInputs),
+    //         headers: {'Content-Type': 'applicaton/json',}
+    //     })
+    //     .then((response)=>response.json())
+    //     .then((responseJSON)=>responseJSON.message)
+    // }, [formInputs]);
+
     return(
-        <form>
+        <form action="/handle_login" method="POST">
             {prompt.currentform}
-            <UserRedir changeText={changeText} prompt={prompt} />
+            <UserRedir changeText={changeText} prompt={prompt} getFormInputs={getFormInputs}/>
         </form>
     );
 }

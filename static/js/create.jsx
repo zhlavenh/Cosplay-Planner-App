@@ -1,8 +1,4 @@
 
-
-function SearchFilter(){
-}
-
 function Display(props){
     return (
         <div className="row">
