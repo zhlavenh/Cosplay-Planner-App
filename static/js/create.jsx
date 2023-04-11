@@ -33,8 +33,8 @@ function Display(){
         })
         .then((response)=>response.json())
         .then((serverData)=>{
-            console.log(serverData.data.Page.characters);
             setOptions(serverData.data.Page.characters);
+            dropDown
         });
     }, [characterName]);
 
@@ -42,7 +42,6 @@ function Display(){
     function dropDown(){
         let content = []
         for (let i = 0; i < options.length ; i++) {
-    
             const retCharacter = options[i];
             content.push(<li>{retCharacter.name.full}</li>);
         }
