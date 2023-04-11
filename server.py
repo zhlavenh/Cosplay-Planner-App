@@ -1,33 +1,31 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, session
 import requests
 from model import connect_to_db, db
 import crud
+import os
 
 app = Flask(__name__)
-# Webpages
+app.secret_key = os.environ['secret_key']
+
+# Display Webpages
 @app.route('/')
 def show_homepage():
-
     return render_template("homepage.html")
 
 @app.route('/user_account')
 def nav_user_acct():
-
     return render_template("account.html")
 
 @app.route('/user_collections')
 def nav_user_collections():
-
     return render_template("collections.html")
 
 @app.route('/user_outfits')
 def nav_user_outfits():
-
     return render_template("outfits.html")
 
 @app.route('/login')
 def nav_login():
-
     return render_template("login.html")
 
 @app.route('/characters')
