@@ -3,18 +3,25 @@
 function SearchFilter(){
 }
 
-function CreateForm(){
+function Display(props){
     return (
-        <form>
-            <div className="form-group">
-
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+        <div className="row">
+            <h1>This is the creation page</h1>
+            <form>
+                <div className="form-group">
+                    <label htmlFor="outfitName">Outfit name</label>
+                    <input type="outfitName" className="form-control" id="outfitName" placeholder="Name of outfit"/>
+                </div>
+                <div className="form-group">
+                    <SearchCharacterName />
+                </div>
+                <button type="submit" className="btn btn-primary">Submit</button>
+            </form>
+        </div>
     );
 }
 
-function Display(){
+function SearchCharacterName(){
     const [characterName, setCharacterName] = React.useState({name: ""})
     const [options, setOptions] =  React.useState([])
 
@@ -24,6 +31,14 @@ function Display(){
         setCharacterName(searchInput);
     }
 
+    function dropDown(){
+        let content = []
+        for (let i = 0; i < options.length ; i++) {
+            const retCharacter = options[i];
+            content.push(<li>{retCharacter.name.full}</li>);
+        }
+        return content;
+    }
 
     React.useEffect(() => {
         fetch('/find_character',{
@@ -39,28 +54,15 @@ function Display(){
     }, [characterName]);
 
 
-    function dropDown(){
-        let content = []
-        for (let i = 0; i < options.length ; i++) {
-            const retCharacter = options[i];
-            content.push(<li>{retCharacter.name.full}</li>);
-        }
-        return content;
-    }
-
     return (
-        <div className="row">
-            <h1>This is the creation page</h1>
-            <div className="dropdown">
-                <div id="myDropdown" className="dropdown-content">
-                    <input type="text" placeholder="Search.." id="myInput" onKeyUp={filterFunction}/>
-                    <ul className="list-group">
-                        {dropDown()}
-                    </ul>
-                </div>
+        <div className="dropdown">
+            <div id="myDropdown" className="dropdown-content">
+                <input type="text" placeholder="Search.." id="myInput" onKeyUp={filterFunction}/>
+                <ul className="list-group">
+                    {dropDown()}
+                </ul>
             </div>
         </div>
-
     );
 }
 
