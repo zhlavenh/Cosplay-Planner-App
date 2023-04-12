@@ -1,3 +1,5 @@
+const useNavigate = ReactRouterDOM.useNavigation;
+
 function NewUserForm(props){
     return (
         <React.Fragment>
@@ -17,7 +19,7 @@ function NewUserForm(props){
 
         <div className="form-group">
             <label htmlFor="email" htmlform="email">Email:</label>
-            <input type="text" className="form-control" placeholder="Email" id="email" name="email" onChange={props.updateInputs}/>
+            <input type="text" className="form-control" placeholder="Sample@email.com" id="email" name="email" onChange={props.updateInputs}/>
         </div>
 
         <div className="form-group">
@@ -91,6 +93,7 @@ function UserStatus(){
     const [prompt, getText] = React.useState(initalText)
     const [formInputs, setInputs] = React.useState(initialInputs)
 
+
     function changeText(evt){
         evt.preventDefault();
         if (prompt.introText == "New to CP?"){
@@ -123,18 +126,30 @@ function UserStatus(){
 
         .then((response)=>response.json())
         .then((responseJSON)=>{
-            console.log(responseJSON.message);
-            alert(responseJSON.message)
+            if (responseJSON.status == false){
+                alert(responseJSON.message);
+            }
+            else{
+                alert("navigating pages");
+                setTimeout = () => {
+                    
+                }
+            }
+
         });
     }
 
 
     return(
+
         <form action="/handle_login" method="POST">
             {prompt.currentform}
             <UserRedir changeText={changeText} prompt={prompt} getFormInputs={getFormInputs}/>
         </form>
+
+
     );
 }
+
 
 ReactDOM.render(<UserStatus />, document.getElementById("login"));

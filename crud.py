@@ -15,17 +15,20 @@ def create_user(user_name, user_password, fname, lname, email):
                 fname=fname, lname=lname, email=email, date_created=date_created)
     
     return user
-def get_user_info(userName, password):
+def get_user_info(form_type, userName, password):
     """Find exisiting user in db"""
 
     user_info = db.session.query(User).filter((User.user_name == userName) | (User.email == userName)).first()
-
     if user_info == None:
         return "Looks like we dont have that username or email. Click below to create an account."
-    elif password != user_info.user_password:
-        return "Wrong password"
-    else:
-        return "Successful login"
+    elif form_type == "Login":
+        if password != user_info.user_password:
+            return "Wrong password"
+        else:
+            return "Logged in"
+    elif form_type == "Create Account":
+        if password == user_info.user_password:
+            return "Account created!"
 
 def find_show(name_of_show):
     show_in_db = db.session.query(Show).filter(Show.english_title == name_of_show).first()

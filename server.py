@@ -3,13 +3,23 @@ import requests
 from model import connect_to_db, db, User, Collection, Outfit, Character, Shop, Item, Show
 import crud
 import os
+from dotenv import dotenv_values
+
+config = {
+    **dotenv_values(".env.secret"),
+    **os.environ,
+}
 
 app = Flask(__name__)
-app.secret_key = os.environ['secret_key']
+app.secret_key = 'secret_key'
 
 # Display Webpages
 @app.route('/')
 def show_homepage():
+    session["user_credentials"] = {
+        "user_name": None,
+        "user_password": None
+    }
     return render_template("homepage.html")
 
 @app.route('/user_account')
@@ -59,18 +69,34 @@ def disp_all_char_matches():
 @app.route('/handle_login', methods=['POST'])
 def handle_login():
     """Log in user"""
-    formInputs = request.get_json()
-    formType = formInputs["formType"]
-    user_name = formInputs["user_name"]
-    password = formInputs["password"]
-    response = {"message": ""}
-    if user_name == None:
+    form = request.get_json()
+    formType = form["formType"]
+    response = {"message": "", "status": False, "redirect": ""}
+    
+    if form["user_name"] == None:
         response["message"] = "You haven't entered anything yet"
         return response
     elif formType == "Login":
-        response["message"] = crud.get_user_info(user_name, password)
-        return response
-
+        response["message"] = crud.get_user_info(formType, form["user_name"], form["password"])
+    elif formType == "Create Account":
+        if "@" not in form["email"]:
+            response["message"] = "Please enter a valid email address"
+        elif None in form.values():
+            response["message"] = "Please fill out all fields to create account"
+        elif form["password"] != form["password2"]:
+            response["message"] = "passwords do not match"
+        else:
+            user = crud.create_user(form["user_name"], form["password"], 
+                                    form["fname"], form["lname"], form["email"])
+            db.session.add(user)
+            db.session.commit()
+            response["message"] = crud.get_user_info(form["user_name"], form["password"])
+    
+    response["status"] = (response["message"] in ["Logged in", "Account Created!"])
+    # session["user_credentials"]["user_name"] = form["user_name"]
+    # session["user_credentials"]["user_password"] = form["password"]
+    # session.modified = True
+    return response
 
 
 if __name__ == "__main__":
