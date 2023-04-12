@@ -1,4 +1,4 @@
-function NewUserForm(){
+function NewUserForm(props){
     return (
         <React.Fragment>
         <br/>
@@ -7,32 +7,32 @@ function NewUserForm(){
         <div className="row">
             <div className="form-group col">
                 <label htmlFor="fname">First Name</label>
-                <input type="text" className="form-control" placeholder="First Name" id="fname" name="fname"/>
+                <input type="text" className="form-control" placeholder="First Name" id="fname" name="fname" onChange={props.updateInputs}/>
             </div>
             <div className="form-group col">
                 <label htmlFor="lname">Last Name</label>
-                <input type="text" className="form-control" placeholder="Last Name" id="lname" name="lname"/>
+                <input type="text" className="form-control" placeholder="Last Name" id="lname" name="lname" onChange={props.updateInputs}/>
             </div>
         </div>
 
         <div className="form-group">
             <label htmlFor="email" htmlform="email">Email:</label>
-            <input type="text" className="form-control" placeholder="Email" id="email" name="email"/>
+            <input type="text" className="form-control" placeholder="Email" id="email" name="email" onChange={props.updateInputs}/>
         </div>
 
         <div className="form-group">
             <label htmlFor="user_name" htmlform="user_name">Username:</label>
-            <input type="text" className="form-control" placeholder="Username" id="user_name" name="user_name"/>
+            <input type="text" className="form-control" placeholder="Username" id="user_name" name="user_name" onChange={props.updateInputs}/>
         </div>
 
         <div className="row">
             <div className="form-group col">
                 <label htmlFor="password">Password</label>
-                <input type="text" className="form-control" placeholder="Password" id="password" name="password"/>
+                <input type="text" className="form-control" placeholder="Password" id="password" name="password" onChange={props.updateInputs}/>
             </div>
             <div className="form-group col">
                 <label htmlFor="password2">Password</label>
-                <input type="text" className="form-control" placeholder="Retype Password" id="password2" name="password"/>
+                <input type="text" className="form-control" placeholder="Retype Password" id="password2" name="password" onChange={props.updateInputs}/>
             </div>
         </div>
         <br/>        
@@ -41,7 +41,8 @@ function NewUserForm(){
     );
 }
 
-function ExistUserForm(){
+function ExistUserForm(props){
+
     return(
         <React.Fragment>
         <br/>
@@ -50,11 +51,11 @@ function ExistUserForm(){
         <div className="row">
             <div className="form-group col">
                 <label htmlFor="user_name">Username/Email</label>
-                <input type="text" className="form-control" placeholder="Username/Email" id="user_name" name="user_name"/>
+                <input type="text" className="form-control" placeholder="Username/Email" id="user_name" name="user_name" onChange={props.updateInputs}/>
             </div>
             <div className="form-group col">
                 <label htmlFor="password">Password</label>
-                <input type="text" className="form-control" placeholder="Password" id="password" name="password"/>
+                <input type="text" className="form-control" placeholder="Password" id="password" name="password" onChange={props.updateInputs}/>
             </div>
         </div>
         <br/> 
@@ -83,57 +84,50 @@ function UserRedir(props){
     );
 }
 
+
 function UserStatus(){
-    const initalText = {buttonText: "Create an account.", introText: "New to CP?", status: "Login", currentform: ExistUserForm()}
-    const initialInputs = {formType: null, user_name: null, user_password: null, valPassword: null, fname: null, lname: null, email: null}
+    const initalText = {buttonText: "Create an account.", introText: "New to CP?", status: "Login", currentform: <ExistUserForm updateInputs={updateInputs}/>, flashMessage: ""}
+    const initialInputs = {formType: null, user_name: null, password: null, password2: null, fname: null, lname: null, email: null}
     const [prompt, getText] = React.useState(initalText)
-    const [formInputs, setInputs] = React.useState("empty")
+    const [formInputs, setInputs] = React.useState(initialInputs)
 
     function changeText(evt){
         evt.preventDefault();
         if (prompt.introText == "New to CP?"){
-            getText({...prompt, buttonText: "Log in!", introText: "Already have an account?", status: "Create Account", currentform: NewUserForm()});
+            const newUserForm = <NewUserForm updateInputs={updateInputs}/>
+            getText({...prompt, buttonText: "Log in!", introText: "Already have an account?", status: "Create Account", currentform: newUserForm});
         }
         else{
-            getText({...prompt, buttonText: "Create an account.", introText: "New to CP?", status: "Log in", currentform: ExistUserForm()});
+            const extUserForm = <ExistUserForm updateInputs={updateInputs}/>
+            getText({...prompt, buttonText: "Create an account.", introText: "New to CP?", status: "Log in", currentform: extUserForm});
         }
     }
+
+    function updateInputs(evt){
+        evt.preventDefault();
+        const fieldID = evt.target.id;
+        const fieldValue = evt.target.value;
+        setInputs(Object.assign(formInputs, {[fieldID]: fieldValue}));
+    }
+
 
     function getFormInputs(evt){
         evt.preventDefault();
         const currentFormType = evt.target.id;
-        if (currentFormType == "Login"){
-            const userName = document.getElementById("user_name").value;
-            const userPassword = document.getElementById("password").value;
-            setInputs({...initialInputs, formType: "existingUser", user_name: userName, user_password: userPassword});
-            console.log(`after serInputs ${formInputs}`);
-            // setInputs(formInputs["formType"]="existingUser", formInputs["user_name"]=userName, formInputs["user_password"]=userPassword);
+        formInputs.formType = currentFormType;
+        fetch('/handle_login',{
+            method: 'POST',
+            body: JSON.stringify(formInputs),
+            headers: {'Content-Type': 'application/json',}
+        })
 
-        }
-        else if (currentFormType == "Create Account"){
-            const userName = document.getElementById("user_name").value;
-            const userPassword = document.getElementById("password").value;
-            const valPassword = document.getElementById("password2").value;
-            const fName = document.getElementById("fname").value;
-            const lName = document.getElementById("lname").value;
-            const Email = document.getElementById("email").value;
-            setInputs(
-                formInputs["formType"]="newUser", formInputs["user_name"]=userName, formInputs["user_password"]=userPassword,
-                formInputs["valPassword"]=valPassword, formInputs["fname"]=fName, formInputs["lname"]=lName, 
-                formInputs["email"]=Email
-            );
-        }
+        .then((response)=>response.json())
+        .then((responseJSON)=>{
+            console.log(responseJSON.message);
+            alert(responseJSON.message)
+        });
     }
 
-    // React.useEffect(()=>{
-    //     fetch('/handle_login',{
-    //         method: 'POST',
-    //         body: JSON.stringify(formInputs),
-    //         headers: {'Content-Type': 'applicaton/json',}
-    //     })
-    //     .then((response)=>response.json())
-    //     .then((responseJSON)=>responseJSON.message)
-    // }, [formInputs]);
 
     return(
         <form action="/handle_login" method="POST">

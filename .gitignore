@@ -1,3 +1,4 @@
 *.pyc
 env
 *secret.*
+test.py

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash, request, session, redirect
 import requests
-from model import connect_to_db, db
+from model import connect_to_db, db, User, Collection, Outfit, Character, Shop, Item, Show
 import crud
 import os
 
@@ -56,19 +56,23 @@ def disp_all_char_matches():
     return response.json()
 
 #Sessions handling
-@app.route('/handle-login', methods=['POST'])
+@app.route('/handle_login', methods=['POST'])
 def handle_login():
     """Log in user"""
-    formType = request.get_json("formType")
-    if formType == "existingUSer":
-        flash("Welcome Back *User's name*")
-        response = {"message": "Successful login"}
-        return response.json()
-    elif formType == "newUser":
-        flash("Glad to have you join CP *User's name*")
-        response = {"message": "Successful account creation"}
-        return response.json()
+    formInputs = request.get_json()
+    formType = formInputs["formType"]
+    user_name = formInputs["user_name"]
+    password = formInputs["password"]
+    response = {"message": ""}
+    if user_name == None:
+        response["message"] = "You haven't entered anything yet"
+        return response
+    elif formType == "Login":
+        response["message"] = crud.get_user_info(user_name, password)
+        return response
+
 
 
 if __name__ == "__main__":
+    connect_to_db(app)
     app.run(debug=True, host="0.0.0.0")
