@@ -16,23 +16,40 @@ app.secret_key = 'secret_key'
 # Display Webpages
 @app.route('/')
 def show_homepage():
-    session["user_credentials"] = {
-        "user_name": None,
-        "user_password": None
-    }
-    return render_template("homepage.html")
+    if 'user_info' not in session:
+        session["user_info"] = {}
+        session.modified = True
+        return render_template("homepage.html")
+    else:
+        return render_template("homepage.html")
+
+# @app.route('/user_account')
+# def nav_user_acct():
+#     return render_template("account.html")
 
 @app.route('/user_account')
-def nav_user_acct():
-    return render_template("account.html")
+def nav_user_acct_name():
+    
+    if 'user_name' not in session["user_info"]:
+        return redirect('/login')
+    else:
+        return render_template("account.html")
 
 @app.route('/user_collections')
 def nav_user_collections():
-    return render_template("collections.html")
+    
+    if 'user_name' not in session["user_info"]:
+        return redirect('/login')
+    else:
+        return render_template("collections.html")
 
 @app.route('/user_outfits')
 def nav_user_outfits():
-    return render_template("outfits.html")
+    
+    if 'user_name' not in session["user_info"]:
+        return redirect('/login')
+    else:
+        return render_template("outfits.html")
 
 @app.route('/login')
 def nav_login():
@@ -48,7 +65,11 @@ def nav_show():
 
 @app.route('/create')
 def nav_create_page():
-    return render_template("create.html")
+    
+    if 'user_name' not in session["user_info"]:
+        return redirect('/login')
+    else:
+        return render_template("create.html")
 
 # api routes
 @app.route('/disp_all_anime')
@@ -71,33 +92,71 @@ def handle_login():
     """Log in user"""
     form = request.get_json()
     formType = form["formType"]
-    response = {"message": "", "status": False, "redirect": ""}
-    
-    if form["user_name"] == None:
-        response["message"] = "You haven't entered anything yet"
-        return response
-    elif formType == "Login":
-        response["message"] = crud.get_user_info(formType, form["user_name"], form["password"])
-    elif formType == "Create Account":
-        if "@" not in form["email"]:
-            response["message"] = "Please enter a valid email address"
-        elif None in form.values():
-            response["message"] = "Please fill out all fields to create account"
-        elif form["password"] != form["password2"]:
-            response["message"] = "passwords do not match"
-        else:
-            user = crud.create_user(form["user_name"], form["password"], 
-                                    form["fname"], form["lname"], form["email"])
-            db.session.add(user)
-            db.session.commit()
-            response["message"] = crud.get_user_info(form["user_name"], form["password"])
-    
-    response["status"] = (response["message"] in ["Logged in", "Account Created!"])
-    # session["user_credentials"]["user_name"] = form["user_name"]
-    # session["user_credentials"]["user_password"] = form["password"]
-    # session.modified = True
-    return response
+    response = {"message": False, "status": False, "user_name": ""}
+        
+    if 'user_name' not in session["user_info"]:
 
+        if form["user_name"] == None:
+            response["message"] = "You haven't entered anything yet"
+            return response
+
+    
+        
+        if formType == "Login":
+            user = crud.get_user_by_user_name_or_email(form["user_name"])
+            if user == None:
+                response["message"] = "Looks like we dont have that username or email. Click below to create an account."
+
+            elif form["password"] != user.user_password:
+                response["message"] = "Wrong Password"
+
+            else: 
+                response["message"] = "Logged in"
+                response["status"] = True
+
+                session["user_info"]["user_name"] = user.user_name
+                session["user_info"]["user_password"] = user.user_password
+                session["user_info"]["email"] = user.email
+                session.modified = True
+
+            
+        elif formType == "Create Account":
+            user = crud.get_user_by_user_name_or_email(form["email"]) or crud.get_user_by_user_name_or_email(form["user_name"])
+            
+            if "@" not in form["email"]:
+                response["message"] = "Please enter a valid email address"
+            
+            elif user != None:
+                response["message"] = "Looks like that email or user name already exist. Please log in or click forgot password."
+            
+            elif None in form.values():
+                response["message"] = "Please fill out all fields to create account"
+            
+            elif form["password"] != form["password2"]:
+                response["message"] = "passwords do not match"
+            
+            else:
+                user = crud.create_new_user(form["user_name"], form["password"], 
+                                        form["fname"], form["lname"], form["email"])
+                db.session.add(user)
+                db.session.commit()
+
+            if (user != None) and (user.user_password == form["password"]):
+                response["message"] = "Account Created!"
+                response["status"] = True
+                response["user_name"] = user.user_name
+                
+                session["user_info"]["user_name"] = user.user_name
+                session["user_info"]["user_password"] = user.user_password
+                session["user_info"]["email"] = user.email
+                session.modified = True
+
+            elif response["message"] == False:
+                response["message"] = "There was an error in creating your account"
+
+        return response
+    else:
+        return response
 
 if __name__ == "__main__":
     connect_to_db(app)

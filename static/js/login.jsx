@@ -1,4 +1,4 @@
-const useNavigate = ReactRouterDOM.useNavigation;
+
 
 function NewUserForm(props){
     return (
@@ -87,8 +87,8 @@ function UserRedir(props){
 }
 
 
-function UserStatus(){
-    const initalText = {buttonText: "Create an account.", introText: "New to CP?", status: "Login", currentform: <ExistUserForm updateInputs={updateInputs}/>, flashMessage: ""}
+function Display(){
+    const initalText = {buttonText: "Create an account.", introText: "New to CP?", status: "Login", currentform: <ExistUserForm updateInputs={updateInputs}/>, inSession: false}
     const initialInputs = {formType: null, user_name: null, password: null, password2: null, fname: null, lname: null, email: null}
     const [prompt, getText] = React.useState(initalText)
     const [formInputs, setInputs] = React.useState(initialInputs)
@@ -118,6 +118,7 @@ function UserStatus(){
         evt.preventDefault();
         const currentFormType = evt.target.id;
         formInputs.formType = currentFormType;
+
         fetch('/handle_login',{
             method: 'POST',
             body: JSON.stringify(formInputs),
@@ -130,26 +131,24 @@ function UserStatus(){
                 alert(responseJSON.message);
             }
             else{
-                alert("navigating pages");
-                setTimeout = () => {
-                    
-                }
+                prompt.inSession = True;
+                window.location.href = "/user_account";
             }
 
         });
+
     }
 
+    if (prompt.insession == false){
+        return(
+            <form action="/handle_login" method="POST">
+                {prompt.currentform}
+                <UserRedir changeText={changeText} prompt={prompt} getFormInputs={getFormInputs}/>
+            </form>
+        ); 
+    }
 
-    return(
-
-        <form action="/handle_login" method="POST">
-            {prompt.currentform}
-            <UserRedir changeText={changeText} prompt={prompt} getFormInputs={getFormInputs}/>
-        </form>
-
-
-    );
 }
 
 
-ReactDOM.render(<UserStatus />, document.getElementById("login"));
+ReactDOM.render(<Display />, document.getElementById("login"));

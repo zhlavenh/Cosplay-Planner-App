@@ -1,9 +1,7 @@
-function Hello(){
+function Display(){
     return (
         <h1>This is the user's account page</h1>
     );
 }
 
-
-console.log(Hello);
-ReactDOM.render(<Hello />, document.getElementById("user_account"));
+ReactDOM.render(<Display />, document.getElementById("user_account"));
