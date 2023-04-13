@@ -1,5 +1,6 @@
 
 
+
 function NewUserForm(props){
     return (
         <React.Fragment>
@@ -88,7 +89,7 @@ function UserRedir(props){
 
 
 function Display(){
-    const initalText = {buttonText: "Create an account.", introText: "New to CP?", status: "Login", currentform: <ExistUserForm updateInputs={updateInputs}/>, inSession: false}
+    const initalText = {buttonText: "Create an account.", introText: "New to CP?", status: "Login", currentform: <ExistUserForm updateInputs={updateInputs}/>}
     const initialInputs = {formType: null, user_name: null, password: null, password2: null, fname: null, lname: null, email: null}
     const [prompt, getText] = React.useState(initalText)
     const [formInputs, setInputs] = React.useState(initialInputs)
@@ -131,7 +132,7 @@ function Display(){
                 alert(responseJSON.message);
             }
             else{
-                prompt.inSession = True;
+
                 window.location.href = "/user_account";
             }
 
@@ -139,16 +140,17 @@ function Display(){
 
     }
 
-    if (prompt.insession == false){
-        return(
-            <form action="/handle_login" method="POST">
-                {prompt.currentform}
-                <UserRedir changeText={changeText} prompt={prompt} getFormInputs={getFormInputs}/>
-            </form>
-        ); 
-    }
+
+    return(
+        <form action="/handle_login" method="POST">
+            {prompt.currentform}
+            <UserRedir changeText={changeText} prompt={prompt} getFormInputs={getFormInputs}/>
+        </form>
+    ); 
+
 
 }
+
 
 
 ReactDOM.render(<Display />, document.getElementById("login"));

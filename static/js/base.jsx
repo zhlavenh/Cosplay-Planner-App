@@ -1,4 +1,22 @@
+
+
+
 function Header(){
+    const [isLoggedIn, setLogIn] =  React.useState(false);
+
+
+    function loggedIn(evt){
+        if (!isLoggedIn){
+            window.location.href = "/login";
+        } else {window.location.href = "/user_account";}
+    }
+
+    React.useEffect(()=>{
+        fetch('/loggedIn')
+        .then((response)=>response.json())
+        .then((status)=>{setLogIn(status)});
+    }, []);
+
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <a className="navbar-brand justify-content-start" href="/">Cosplay Planner</a>
@@ -7,7 +25,7 @@ function Header(){
             </button>
             <div className="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
                 <div className="navbar-nav">
-                <a className="nav-item nav-link" href="/login">Login</a>
+                <button className="nav-item nav-link" onClick={loggedIn} style={{border: "none", background: "none"}}>Login</button>
                 <a className="nav-item nav-link" href="/user_account">My Account</a>
                 <a className="nav-item nav-link" href="/user_collections">Collections</a>
                 <a className="nav-item nav-link" href="/user_outfits">Outfits</a>

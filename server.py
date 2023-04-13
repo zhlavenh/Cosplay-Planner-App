@@ -94,70 +94,75 @@ def handle_login():
     formType = form["formType"]
     response = {"message": False, "status": False, "user_name": ""}
         
-    if 'user_name' not in session["user_info"]:
 
-        if form["user_name"] == None:
-            response["message"] = "You haven't entered anything yet"
-            return response
+    if form["user_name"] == None:
+        response["message"] = "You haven't entered anything yet"
+        return response
+
 
     
+    if formType == "Login":
+        user = crud.get_user_by_user_name_or_email(form["user_name"])
+        if user == None:
+            response["message"] = "Looks like we dont have that username or email. Click below to create an account."
+
+        elif form["password"] != user.user_password:
+            response["message"] = "Wrong Password"
+
+        else: 
+            response["message"] = "Logged in"
+            response["status"] = True
+
+            session["user_info"]["user_name"] = user.user_name
+            session["user_info"]["user_password"] = user.user_password
+            session["user_info"]["email"] = user.email
+            session.modified = True
+
         
-        if formType == "Login":
-            user = crud.get_user_by_user_name_or_email(form["user_name"])
-            if user == None:
-                response["message"] = "Looks like we dont have that username or email. Click below to create an account."
+    elif formType == "Create Account":
+        user = crud.get_user_by_user_name_or_email(form["email"]) or crud.get_user_by_user_name_or_email(form["user_name"])
+        
+        if "@" not in form["email"]:
+            response["message"] = "Please enter a valid email address"
+        
+        elif user != None:
+            response["message"] = "Looks like that email or user name already exist. Please log in or click forgot password."
+        
+        elif None in form.values():
+            response["message"] = "Please fill out all fields to create account"
+        
+        elif form["password"] != form["password2"]:
+            response["message"] = "passwords do not match"
+        
+        else:
+            user = crud.create_new_user(form["user_name"], form["password"], 
+                                    form["fname"], form["lname"], form["email"])
+            db.session.add(user)
+            db.session.commit()
 
-            elif form["password"] != user.user_password:
-                response["message"] = "Wrong Password"
-
-            else: 
-                response["message"] = "Logged in"
-                response["status"] = True
-
-                session["user_info"]["user_name"] = user.user_name
-                session["user_info"]["user_password"] = user.user_password
-                session["user_info"]["email"] = user.email
-                session.modified = True
-
+        if (user != None) and (user.user_password == form["password"]):
+            response["message"] = "Account Created!"
+            response["status"] = True
+            response["user_name"] = user.user_name
             
-        elif formType == "Create Account":
-            user = crud.get_user_by_user_name_or_email(form["email"]) or crud.get_user_by_user_name_or_email(form["user_name"])
-            
-            if "@" not in form["email"]:
-                response["message"] = "Please enter a valid email address"
-            
-            elif user != None:
-                response["message"] = "Looks like that email or user name already exist. Please log in or click forgot password."
-            
-            elif None in form.values():
-                response["message"] = "Please fill out all fields to create account"
-            
-            elif form["password"] != form["password2"]:
-                response["message"] = "passwords do not match"
-            
-            else:
-                user = crud.create_new_user(form["user_name"], form["password"], 
-                                        form["fname"], form["lname"], form["email"])
-                db.session.add(user)
-                db.session.commit()
+            session["user_info"]["user_name"] = user.user_name
+            session["user_info"]["user_password"] = user.user_password
+            session["user_info"]["email"] = user.email
+            session.modified = True
 
-            if (user != None) and (user.user_password == form["password"]):
-                response["message"] = "Account Created!"
-                response["status"] = True
-                response["user_name"] = user.user_name
-                
-                session["user_info"]["user_name"] = user.user_name
-                session["user_info"]["user_password"] = user.user_password
-                session["user_info"]["email"] = user.email
-                session.modified = True
+        elif response["message"] == False:
+            response["message"] = "There was an error in creating your account"
 
-            elif response["message"] == False:
-                response["message"] = "There was an error in creating your account"
+    return response
 
+@app.route('/loggedIn')
+def is_logged_in():
+    response = {"status": False}
+    if 'user_name' not in session['user_info']:
         return response
-    else:
+    else: 
+        response["status"]=True
         return response
-
 if __name__ == "__main__":
     connect_to_db(app)
     app.run(debug=True, host="0.0.0.0")
