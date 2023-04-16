@@ -4,7 +4,7 @@ function CreateNewCard(){
             <div className="col-md-auto col-sm-1 mb-1">
                 <div className="card" style={{width: '10rem', height: '160px', padding: 'auto 12px'}}>
                     <div className="card-body d-flex align-items-center justify-content-center" >
-                        <a role="button" className="btn d-flex align-items-center justify-content-center" style={{width: '50%', height: '50%'}}href="/create">
+                        <a role="button" className="btn d-flex align-items-center justify-content-center" style={{width: '50%', height: '50%'}} href="/create/new-outfit">
                             <i className="bi bi-plus-circle" style={{fontSize: '60px'}}></i>
                         </a>   
                     </div>

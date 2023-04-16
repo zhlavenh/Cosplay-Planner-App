@@ -28,10 +28,10 @@ class Outfit(db.Model):
     outfit_name = db.Column(db.String(40), nullable=False)
     public = db.Column(db.Boolean, nullable=False, default=True)
     notes = db.Column(db.Text)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     date_created = db.Column(db.Date, nullable=False)
     last_updated = db.Column(db.Date, nullable=False)
-    character_id = db.Column(db.Integer, db.ForeignKey('characters.character_id'))
+    character_id = db.Column(db.Integer, db.ForeignKey('characters.character_id'), nullable=False)
     collection_id = db.relationship('Collection', secondary='collection_outfits', backref=('outfits'))
 
     def __repr__(self):
@@ -45,9 +45,9 @@ class Collection(db.Model):
     collection_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     collection_name = db.Column(db.String(40), nullable=False)
     public = db.Column(db.Boolean, nullable=False, default=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    date_created = db.Column(db.Date)
-    last_updated = db.Column(db.Date)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    date_created = db.Column(db.Date, nullable=False)
+    last_updated = db.Column(db.Date, nullable=False)
     outfit_id = db.relationship('Outfit', secondary='collection_outfits', backref=('collections'))
 
     def __repr__(self):
@@ -68,7 +68,7 @@ class Character(db.Model):
     __tablename__ = "characters"
 
     character_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    character_image_id = db.Column(db.Integer)
+    character_image_URL = db.Column(db.String)
     character_name = db.Column(db.String(50), nullable=False)
     gender = db.Column(db.String(1))
     show_eng_title = db.Column(db.String(40), db.ForeignKey('shows.english_title'))

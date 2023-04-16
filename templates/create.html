@@ -2,7 +2,14 @@
 {% block title %} Create new {% endblock %}
 
 {% block body %}
-    <div class="container" id="create"></div>
+{% if page_type == 'new_outfit' %}
+<div class="container" id="create_new_outfit"></div>
+{% elif page_type == 'new_collection' %}
+<div class="container" id="create_new_collection"></div>
+{% else %}
+<div class="container" id="create_base"></div>
+{% endif %}
+
 {% endblock %}
 
 {% block js %}

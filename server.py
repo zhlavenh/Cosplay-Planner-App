@@ -1,4 +1,5 @@
 from flask import Flask, render_template, flash, request, session, redirect
+from datetime import datetime
 import requests
 from model import connect_to_db, db, User, Collection, Outfit, Character, Shop, Item, Show
 import crud
@@ -22,10 +23,6 @@ def show_homepage():
         return render_template("homepage.html")
     else:
         return render_template("homepage.html")
-
-# @app.route('/user_account')
-# def nav_user_acct():
-#     return render_template("account.html")
 
 @app.route('/user_account')
 def nav_user_acct_name():
@@ -62,6 +59,22 @@ def nav_character():
 @app.route('/shows')
 def nav_show():
     return render_template("shows.html")
+
+@app.route('/create/new-outfit')
+def nav_create_new_outfit_page():
+    
+    if 'user_name' not in session["user_info"]:
+        return redirect('/login')
+    else:
+        return render_template("create.html", page_type="new_outfit")
+    
+@app.route('/create/new-collection')
+def nav_create_new_collection_page():
+    
+    if 'user_name' not in session["user_info"]:
+        return redirect('/login')
+    else:
+        return render_template("create.html", page_type="new_collection")
 
 @app.route('/create')
 def nav_create_page():
@@ -163,6 +176,40 @@ def is_logged_in():
     else: 
         response["status"]=True
         return response
+
+@app.route('/acct_info')
+def get_acct_info():
+    user = crud.get_user_by_user_name_or_email(session["user_info"]["user_name"])
+    outfits = crud.get_users_outfits_by_id(user.user_id)
+    collections = crud.get_users_collections_by_id(user.user_id)
+    outfitInfo = []
+    collectionInfo =[]
+    for outfit in outfits:
+        outfitChar = "Empty" if outfit.character_id == None else(crud.get_character(outfit.character_id).character_image_URL)
+        outfitInfo.append((outfit.outfit_name, outfitChar))
+    
+    for collection in collections:
+        collectionInfo.append((collection.collection_name, collection.last_updated.strftime("%B %d, %Y %H:%M:%S")))
+        
+    account_info = {"user_name": user.user_name, "date_created": (user.date_created).strftime("%b %d, %Y"), 
+                    "count_outfits": len(outfits) , "count_collect": len(collections), "collectionInfo": collectionInfo, "outfitInfo": outfitInfo}
+
+    return account_info
+
+@app.route('/user_creations')
+def get_user_creations():
+    user = crud.get_user_by_user_name_or_email(session["user_info"]["user_name"])
+    collections = crud.get_users_collections_by_id(user.user_id)
+    outfits = crud.get_users_outfits_by_id(user.user_id)
+
+    if len(collections) != 0:
+        collection_names = [collection.collection_name for collection in collections]
+    else:
+        collection_names = ["No collections created. Select create new or no collection."]
+    response = {"collection_names": collection_names}
+    return response
+
+
 if __name__ == "__main__":
     connect_to_db(app)
     app.run(debug=True, host="0.0.0.0")

@@ -14,19 +14,24 @@ def create_new_user(user_name, user_password, fname, lname, email):
                 fname=fname, lname=lname, email=email, date_created=date_created)
     
     return user
-def create_new_outfit(outfit_name, public, notes, character_id, collection=False):
+def create_new_outfit(outfit_name, public, notes, character_id, user_id, collection=False, collection_name=None, col_public=None):
     """"Creating a new outfit"""
+    collection_id = None
 
+    if collection != False:
+        collection_id = get_colleciton(collection_id)
+        if collection_id == None:
+            create_empty_collection(collection_name, col_public, user_id)
+            collection_id = get_colleciton(collection_name).collection_id
     date_created = date.today().strftime("%b-%d-%Y")
-
-    outfit = Outfit(outfit_name=outfit_name, public=public, notes=notes, date_created=date_created, last_updated=date_created, character_id=character_id)
+    outfit = Outfit(outfit_name=outfit_name, public=public, notes=notes, date_created=date_created, last_updated=date_created, character_id=character_id, user_id=user_id, collection_id=collection_id)
     return outfit
-def create_empty_collection(collection_name, public):
+def create_empty_collection(collection_name, public, user_id):
     """Create an empty collection"""
     
     date_created = date.today().strftime("%b-%d-%Y")
 
-    collection = Collection(collection_name=collection_name, public=public, date_created=date_created, last_updated=date_created)
+    collection = Collection(collection_name=collection_name, public=public, user_id=user_id, date_created=date_created, last_updated=date_created)
     return collection
 
 
@@ -35,12 +40,14 @@ def get_user_by_user_name_or_email(user_sign_on):
     "Get user"
     user = db.session.query(User).filter((User.user_name == user_sign_on) | (User.email == user_sign_on)).first()
     return user
-def get_colleciton(collection_id):
+def get_colleciton(collection_id_or_name):
+    collection = db.session.query(Collection).filter((Collection.collection_id == collection_id_or_name) | (Collection.collection_name == collection_id_or_name)).first()
+    return collection
+def get_outfit(outfit_id):
     return None
-def get_out(outfit_id):
-    return None
-def get_character(character_name):
-    return None
+def get_character(character_name_or_id):
+    charcter = db.session.query(Character).filter((Character.character_id == character_name_or_id) | (Character.character_name == character_name_or_id)).first()
+    return charcter 
 def get_show(name_of_show):
     show_in_db = db.session.query(Show).filter(Show.english_title == name_of_show).first()
     if show_in_db == None:
@@ -53,6 +60,12 @@ def get_show(name_of_show):
         return show_in_db.show_id
     else:
         return show_in_db.show_id
+def get_users_outfits_by_id(user_id):
+    outfits = db.session.query(Outfit).filter((Outfit.user_id == user_id)).all()
+    return outfits
+def get_users_collections_by_id(user_id):
+    collecitons = db.session.query(Collection).filter(Collection.user_id == user_id).all()
+    return collecitons
 
 # Update
 def add_show(name_of_show):

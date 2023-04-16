@@ -19,16 +19,6 @@ function ShowCard(props){
 
 function ShowRow(){
     const [shows, setShows] = React.useState([])
-
-    // React.useEffect(() => {
-    //     fetch('/disp_all_anime')
-    //     .then((response) => response.json())
-    //     .then((serverData) => {
-    //         console.log(serverData.data.Page.characters.length);
-    //         const characters = serverData.data.Page.characters;
-    //         setShows(characters);
-    //     });
-    //   }, []);
     React.useEffect(() => {
         fetch('/disp_all_anime')
         .then((response)=>response.json())
@@ -38,21 +28,21 @@ function ShowRow(){
     }, []);
 
     function displayAnime(){
-    let content = []
-    for (let i = 0; i < shows.length ; i++) {
+        let content = []
+        for (let i = 0; i < shows.length ; i++) {
 
-        const show_img = shows[i].coverImage.medium;
-        const japanese_title = shows[i].title.native;
-        let show_title = shows[i].title.english;
+            const show_img = shows[i].coverImage.medium;
+            const japanese_title = shows[i].title.native;
+            let show_title = shows[i].title.english;
 
-        if (show_title == null){
-            show_title = shows[i].title.native;
+            if (show_title == null){
+                show_title = shows[i].title.native;
+            }
+
+            content.push(<ShowCard show_img={show_img} show_title={show_title}/>);
         }
 
-        content.push(<ShowCard show_img={show_img} show_title={show_title}/>);
-    }
-
-    return content;
+        return content;
     }
 
     return(
