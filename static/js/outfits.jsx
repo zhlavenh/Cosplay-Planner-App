@@ -14,54 +14,49 @@ function CreateNewCard(){
     );
 }
 
-function OutfitCard(){
+function OutfitCard(props){
     return(
             <div className="col-md-auto col-sm-1 mb-1">
-                <div className="card" style={{width: '10rem'}}>
-                    <div className="card-body">
-                        <img className="card-img-top" src="..." alt="show_title"/>
-                        <h5 className="card-title">Show Title</h5>
-                        <p className="card-text"></p>
-                        <a href="/shows" className="btn btn-primary">Go to all animes</a>
+                <div className="card" style={{width: '10rem', height: '160px'}}>
+                    <div className="card-body d-flex flex-column align-items-center justify-content-center">
+                        <img className="card-img-top" src={props.charImg} alt="show_title" style={{width: "auto", height: "60px"}}/>
+                        <p className="card-title">{props.outfitName}</p>
+                        <a href="" className="btn btn-primary">Click to open</a>
                     </div>
                 </div>
             </div>
     );
 }
 
-// need to put a loop in here for how ever many outfits they have to show and wrap screen
-// function CardRow(){
 
-
-//     return(
-//         <React.Fragment>
-//             <div className="row">
-//                 <OutfitCard/>
-//                 <OutfitCard/>
-//                 <OutfitCard/>
-//                 <OutfitCard/>
-//                 <OutfitCard/>
-//                 <OutfitCard/>
-//             </div>
-//         </React.Fragment>
-//     );
-// }
 
 function Display(){
-
+    const [userOutfits, setUserOutfits] = React.useState();
+    const [outfitInfo, setOutfitInfo] = React.useState();
 
     function displayOutfits(){
         let content = []
-        for (let i = 0; i < 20; i++) {
-            content.push(<OutfitCard/>);
+        for (let index in outfitInfo) {
+            let outfitName = outfitInfo[index][0]
+            let charImg = outfitInfo[index][1]
+            content.push(<OutfitCard charImg={charImg} outfitName={outfitName} />);
           }
         return content;
     }
 
+    React.useEffect(()=>{
+        fetch("/acct_info")
+        .then((response) => response.json())
+        .then((acct_info) => {
+            setOutfitInfo(acct_info.outfitInfo);
+            
+        });
+    }, []);
+
 
     return (
         <div className="container">
-            <h1>This is the user's outfits page</h1>
+            <h1>Welcome to your outfits page</h1>
             <div className="row">
                 <CreateNewCard />
                 {displayOutfits()}

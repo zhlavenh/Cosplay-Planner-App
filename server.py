@@ -95,7 +95,7 @@ def disp_all_anime():
 def disp_all_char_matches():
     inputName = request.get_json()
 
-    url, query, variables = crud.api_find_character(inputName["name"])
+    url, query, variables = crud.api_find_all_character_by_name(inputName["name"])
     response = requests.post(url, json={'query': query, 'variables': variables})
     return response.json()
 
@@ -127,6 +127,7 @@ def handle_login():
             response["status"] = True
 
             session["user_info"]["user_name"] = user.user_name
+            session["user_info"]["user_id"] = user.user_id
             session["user_info"]["user_password"] = user.user_password
             session["user_info"]["email"] = user.email
             session.modified = True
@@ -159,6 +160,7 @@ def handle_login():
             response["user_name"] = user.user_name
             
             session["user_info"]["user_name"] = user.user_name
+            session["user_info"]["user_id"] = user.user_id
             session["user_info"]["user_password"] = user.user_password
             session["user_info"]["email"] = user.email
             session.modified = True
@@ -185,8 +187,8 @@ def get_acct_info():
     outfitInfo = []
     collectionInfo =[]
     for outfit in outfits:
-        outfitChar = "Empty" if outfit.character_id == None else(crud.get_character(outfit.character_id).character_image_URL)
-        outfitInfo.append((outfit.outfit_name, outfitChar))
+        outfitCharImg = "Empty" if outfit.character_id == None else(crud.get_character_by_name_or_id(outfit.character_id).character_image_URL)
+        outfitInfo.append((outfit.outfit_name, outfitCharImg))
     
     for collection in collections:
         collectionInfo.append((collection.collection_name, collection.last_updated.strftime("%B %d, %Y %H:%M:%S")))
@@ -203,12 +205,90 @@ def get_user_creations():
     outfits = crud.get_users_outfits_by_id(user.user_id)
 
     if len(collections) != 0:
+        collecitons_info = []
+
+        for collection in collections:
+            char_list=[]
+            outfit_list = []
+
+            if collection.outfit_list != 0:
+                for outfit in collection.outfit_list:
+                    outfit_list.append(outfit.outfit_name)
+                    char_list.append(crud.get_character_by_name_or_id(outfit.character_id).character_name)
+            else:
+                outfit_list.append("No Outfits in collection click the outfit tab and create a new one")
+                char_list.append("No Outfits in collection click the outfit tab and create a new one")
+
+            collecitons_info.append((collection.collection_name, collection.last_updated.strftime("%b-%d-%Y"), char_list, outfit_list))
+
         collection_names = [collection.collection_name for collection in collections]
     else:
         collection_names = ["No collections created. Select create new or no collection."]
-    response = {"collection_names": collection_names}
+    
+    response = {"collection_names": collection_names, "collections_info": collecitons_info}
     return response
 
+@app.route('/create_new_outfit', methods=["POST"])
+def create_new():
+# Getting form infomation
+    form = request.get_json()
+    formType = form["formType"]
+    response = {"submit_status": False, "message": "Error in creating outfit"}
+    user_id = session["user_info"]["user_id"]
+#Adding charcter/show to site db after submission
+    if crud.get_character_by_name_or_id(form["character_name"]) == None:
+        url, query, variables = crud.api_get_single_character(form["character_name"])
+        api_response = (requests.post(url, json={'query': query, 'variables': variables}).json())["data"]["Character"]
+        gender = api_response['gender'][0]
+        character_image_URL = api_response['image']['medium']
+        show_name = api_response["media"]['edges'][0]['node']['title']['english']
+
+        if crud.get_show_by_id_or_name(show_name) == None:
+            url, query, variables = crud.api_get_single_show_by_name(show_name)
+            api_show_response = (requests.post(url, json={'query': query, 'variables': variables}).json())["data"]["Media"]
+
+            english_title = api_show_response['title']['english']
+            japanese_title = api_show_response['title']['native']
+            air_date = datetime(api_show_response['startDate']['year'], api_show_response['startDate']['month'], api_show_response['startDate']['day'])
+            new_show = crud.add_new_show(english_title, japanese_title, air_date)
+            db.session.add(new_show)
+            db.session.commit()
+
+        new_char = crud.add_new_character(form["character_name"], character_image_URL, gender, (crud.get_show_by_id_or_name(show_name)).show_id)
+        db.session.add(new_char)
+        db.session.commit()
+
+# User created outfit
+    outfit_public = True if form["outfit_public"] == "Public" else False
+    new_outfit = crud.create_new_outfit(form["outfit_name"], form["outfit_notes"], crud.get_character_by_name_or_id(form["character_name"]).character_id, user_id, outfit_public)
+    db.session.add(new_outfit)
+    db.session.commit()
+
+# User created new outfit add added to either a new or existing collection
+    if formType == "createNew":
+        collection_public = True if form["collection_public"] == "Public" else False
+        new_col = crud.create_new_collection(form["collection_name"], user_id, collection_public)
+        db.session.add(new_col)
+        db.session.commit()
+
+        new_col_out = crud.add_outfit_to_collection(crud.get_colleciton(form["collection_name"]).collection_id, crud.get_outfit_by_id_or_name(form["outfit_name"]).outfit_id)
+        db.session.add(new_col_out)
+        db.session.commit()
+
+        reponse = {"submit_status": True, "message": "Outfit created"}
+        return reponse
+    
+    elif formType == "useExist":
+        new_col_out = crud.add_outfit_to_collection(crud.get_colleciton(form["collection_name"]).collection_id, crud.get_outfit_by_id_or_name(form["outfit_name"]).outfit_id)
+        db.session.add(new_col_out)
+        db.session.commit()
+        
+        reponse = {"submit_status": True, "message": "Outfit created"}
+        return reponse
+
+    else:
+        reponse = {"submit_status": True, "message": "Outfit created"}
+        return reponse  
 
 if __name__ == "__main__":
     connect_to_db(app)

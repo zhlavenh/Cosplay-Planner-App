@@ -32,7 +32,7 @@ class Outfit(db.Model):
     date_created = db.Column(db.Date, nullable=False)
     last_updated = db.Column(db.Date, nullable=False)
     character_id = db.Column(db.Integer, db.ForeignKey('characters.character_id'), nullable=False)
-    collection_id = db.relationship('Collection', secondary='collection_outfits', backref=('outfits'))
+    collection_list = db.relationship('Collection', secondary='collection_outfits', backref='outfits')
 
     def __repr__(self):
         return f"<User: {self.user_id} created: {self.outfit_name}/{self.outfit_id} based on: {self.character_id}>"
@@ -48,7 +48,7 @@ class Collection(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     date_created = db.Column(db.Date, nullable=False)
     last_updated = db.Column(db.Date, nullable=False)
-    outfit_id = db.relationship('Outfit', secondary='collection_outfits', backref=('collections'))
+    outfit_list = db.relationship('Outfit', secondary='collection_outfits', backref='collections')
 
     def __repr__(self):
         return f"<User: {self.user_id} created: {self.collection_name}/{self.collection_id}>" 
@@ -62,6 +62,13 @@ class Collection_outfit(db.Model):
     collection_id = db.Column(db.Integer, db.ForeignKey('collections.collection_id'))
     outfit_id = db.Column(db.Integer, db.ForeignKey('outfits.outfit_id'))
 
+    def __init__(self, collection_id, outfit_id):
+        self.collection_id = collection_id
+        self.outfit_id = outfit_id
+
+    def __repr__(self):
+        return f"<{self.collection_id} contains outfit id {self.outfit_id}.>" 
+
 class Character(db.Model):
     """A single character from a show"""
 
@@ -69,14 +76,15 @@ class Character(db.Model):
 
     character_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     character_image_URL = db.Column(db.String)
-    character_name = db.Column(db.String(50), nullable=False)
+    character_name = db.Column(db.String, nullable=False)
     gender = db.Column(db.String(1))
-    show_eng_title = db.Column(db.String(40), db.ForeignKey('shows.english_title'))
+    show_id = db.Column(db.Integer, db.ForeignKey('shows.show_id'))
+
     english_voice_actor = db.Column(db.String(30))
     japanese_voice_actor = db.Column(db.String(30))
 
     def __repr__(self):
-        return f"<Charater name: {self.character_name}>" 
+        return f"<Character name: {self.character_name}>" 
     
 class Shop(db.Model):
     """A shopping site"""
@@ -111,8 +119,8 @@ class Show(db.Model):
     __tablename__ = "shows"
 
     show_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    english_title = db.Column(db.String(40), nullable=False, unique=True)
-    japanese_title = db.Column(db.String(40), nullable=False)
+    english_title = db.Column(db.String, nullable=False)
+    japanese_title = db.Column(db.String, nullable=False)
     air_date = db.Column(db.Date)
 
     def __repr__(self):

@@ -74,18 +74,7 @@ function UserOutfits(props){
         </div>
     );
 }
-// function ShowCard(props){
 
-
-//     return(
-//         <React.Fragment>
-//             {/* <a href="" className="d-flex flex-column justify-content-center align-items-center border border-secondary rounded m-3 p-2" style={{width: "160px", height: "150px"}}>
-//                 <div className="row">{props.colName ? props.colName : props.outName}</div>
-//                 <div className="row">{props.imgUrl ? props.imgUrl : `Last Updated:  ${props.updated}`}</div>
-//             </a> */}
-//         </React.Fragment>
-//     )
-// }
 
 function Display(){
     const info = {user_name: "", member_since: "", count_outfits: 0, count_collect: 0, collecInfo: "", outfitInfo: ""}
