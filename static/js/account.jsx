@@ -31,8 +31,8 @@ function UserCollections(props){
             content.push(
                         <React.Fragment>
                             <a href="" className="d-flex flex-column justify-content-center align-items-center border border-secondary rounded m-3 p-2" style={{width: "160px", height: "150px"}}>
-                                <div className="row">{collectionName}</div>
-                                <div className="row">{collectionUpdated}</div>
+                                <div className="text-wrap text-center">{collectionName}</div>
+                                <div className="">{collectionUpdated}</div>
                             </a>
                         </React.Fragment>
     );
@@ -58,8 +58,8 @@ function UserOutfits(props){
             content.push(
             <React.Fragment>
                 <a href="" className="d-flex flex-column justify-content-center align-items-center border border-secondary rounded m-3 p-2" style={{width: "160px", height: "150px"}}>
+                    <img className="row" src={charImg} style={{width: "auto", height: "60px"}}/>
                     <div className="row">{outfitName}</div>
-                    <div className="row">{charImg}</div>
                 </a>
             </React.Fragment>
             );

@@ -191,7 +191,7 @@ def get_acct_info():
         outfitInfo.append((outfit.outfit_name, outfitCharImg))
     
     for collection in collections:
-        collectionInfo.append((collection.collection_name, collection.last_updated.strftime("%B %d, %Y %H:%M:%S")))
+        collectionInfo.append((collection.collection_name, collection.last_updated.strftime("%B %d, %Y")))
         
     account_info = {"user_name": user.user_name, "date_created": (user.date_created).strftime("%b %d, %Y"), 
                     "count_outfits": len(outfits) , "count_collect": len(collections), "collectionInfo": collectionInfo, "outfitInfo": outfitInfo}
@@ -289,6 +289,25 @@ def create_new():
     else:
         reponse = {"submit_status": True, "message": "Outfit created"}
         return reponse  
+
+@app.route('/create_new_col', methods=["POST"])
+def create_new_col():
+    form = request.get_json()
+
+    new_col = crud.create_new_collection(form["collection_name"], session["user_info"]["user_id"], True if form["public"]=="Public" else False)
+    db.session.add(new_col)
+    db.session.commit()
+
+    if form["outfitsList"] != 0:
+        collection_id = crud.get_colleciton(form["collection_name"]).collection_id
+        for outfit in form["outfitsList"]:
+            outfit_id = crud.get_outfit_by_id_or_name(outfit).outfit_id
+            add_out = crud.add_outfit_to_collection(collection_id, outfit_id)
+            db.session.add(add_out)
+            db.session.commit()
+    response = {"message": "successful"}
+    return response
+
 
 if __name__ == "__main__":
     connect_to_db(app)

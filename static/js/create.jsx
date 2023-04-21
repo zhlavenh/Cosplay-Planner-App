@@ -229,8 +229,96 @@ function CreateNewOutfit(){
 
 // User create new collection
 function CreateNewCollection(){
+    const [showOutfitList, setShowOutfitList] = React.useState(false);
+    const [outfits, setOutfits] = React.useState();
+    const [formInfo, setFormInfo] = React.useState();
+
+    function handleOutfitClick(evt){
+        evt.preventDefault();
+        if (evt.target.value == "Yes"){
+            evt.target.value = "No";
+            evt.target.innerHTML = "No, I want to create an empty collection.";
+            setShowOutfitList(true);
+        } else {evt.target.value = "Yes"; evt.target.innerHTML = "Yes, I want to add outfits now."; setShowOutfitList(false)}
+    }
+
+    function outfitList(){
+        let content = []
+        for (let index in outfits){
+            content.push(<option value={outfits[index][0]}>{outfits[index][0]}</option>);
+        }
+        return content;
+    }
+
+    function submitForm(evt){
+        evt.preventDefault();
+        const collectionName = document.getElementById("collectionName").value
+        const colllectionPublic = document.getElementById("collectionPublicStatus").value
+        if (showOutfitList){
+            const outfitLists = document.getElementById("outfitdropdownlist").selectedOptions
+            const outfitsSelected = new Set()
+            for (let index in outfitLists){
+                outfitsSelected.add(outfitLists.item(index).value);
+            }
+            setFormInfo({collection_name: collectionName, public: colllectionPublic, outfitsList: Array.from(outfitsSelected)});
+
+        } else {setFormInfo({collection_name: collectionName, public: colllectionPublic});}
+    }
+
+    React.useEffect(() => {
+        fetch("/acct_info")
+        .then((response)=>response.json())
+        .then((responseJSON)=>{
+            setOutfits(responseJSON.outfitInfo);
+        });
+    }, [showOutfitList]);
+
+    React.useEffect(()=>{
+        console.log(formInfo);
+        fetch('/create_new_col',{
+            method: 'POST',
+            body: JSON.stringify(formInfo),
+            headers: {'Content-Type': 'application/json',}
+        })
+
+        .then((response)=>response.json())
+        .then((responseJSON)=>{
+            window.location.href = "/user_collections";
+        });
+    }, [formInfo]);
+
+
     return(
-        <h1>This is the create new collection page</h1>
+        <div>
+            <h1>This is the create new collection page</h1>
+            <form id="collecitonForm">
+                <div className="d-flex justify-content-between row">
+                    <div className="col-6 form-group">
+                        <label htmlFor="collectionName">Outfit name</label>
+                        <input type="" className="form-control" id="collectionName" placeholder="Name of collection..."/>
+                    </div>
+                    <div className="d-flex flex-column col-6 form-group">
+                        <label className="" htmlFor="outfitPublic">This colleciton is: </label>
+                        <button className=" btn btn-outline-secondary publicStatus" id="collectionPublicStatus" onClick={statusButtonClick} value="Public" >Public - May be featured on our homepage. Click to change to private.</button>
+                    </div>
+                </div><br/>
+                <div className="d-flex row">
+                    <div className="d-flex col form-group">
+                            <label className="col-3" htmlFor="outfitPublic">Do you want to add any outfits you have created: </label>
+                            <button className="col-9 btn btn-outline-secondary publicStatus" id="addOutfits" onClick={handleOutfitClick} value="Yes" >Yes, I want to add outfits now.</button>
+                    </div>
+                </div><br/>
+                <div className="d-flex row">
+                    {showOutfitList ? 
+                        (<select className="form-select" multiple id="outfitdropdownlist" style={{height: "100px"}}>
+                                {outfitList()}
+                        </select>)
+                        : false}
+                </div>
+                <br/><button type="submit" className="btn btn-primary" onClick={submitForm}>Submit</button>
+            </form>
+        </div>
+
     );
 }
 

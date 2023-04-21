@@ -1,7 +1,7 @@
 function CreateNewCard(){
     return(
         <React.Fragment>
-            <a className="col border border-secondary rounded m-1" role="button" href="/create/new-outfit">
+            <a className="col border border-secondary rounded m-1" role="button" href="/create/new-collection">
                 <div className="" style={{padding: 'auto 12px'}}>
                     <div className="d-flex align-items-center justify-content-center" >
                         <div className="btn d-flex align-items-center justify-content-center" style={{width: '50%', height: '50%'}} >
