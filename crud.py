@@ -111,13 +111,20 @@ def get_all_characters():
                 id
                 name{
                     full
+                    native
                 }
                 gender
+                age
+                description
+                image{
+                    medium
+                }
                 media{
                     edges{
                         node{
                             title{
                                 english
+                                native
                             }
                         }
                     }
@@ -165,7 +172,9 @@ def api_find_all_character_by_name(inputName):
             characters (search: $search) {
                 name{
                     full
+                    native
                 }
+
             }
         }
 
@@ -185,16 +194,24 @@ def api_get_single_character(character_name):
         Character(search: $search){
             name{
                 full
+                native
             }
-            gender
             image{
                 medium
             }
+            description
+            gender
+            age
             media{
                 edges{
                     node{
+                        id
                         title{
                             english
+                            native
+                        }
+                        coverImage{
+                            medium
                         }
                     }
                 }
@@ -219,6 +236,28 @@ def api_get_single_show_by_name(show_name):
             }
             startDate{
                 year, day, month
+            }
+            endDate{
+                year, day, month
+            }
+            coverImage{
+                medium
+            }
+            episodes
+            description
+            characters{
+                edges{
+                    node{
+                        id
+                        name{
+                            full
+                            native
+                        }
+                        image{
+                            medium
+                        }
+                    }
+                }
             }
         }
     }"""

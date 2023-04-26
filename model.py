@@ -25,7 +25,7 @@ class Outfit(db.Model):
     __tablename__ = "outfits"
 
     outfit_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    outfit_name = db.Column(db.String(40), nullable=False)
+    outfit_name = db.Column(db.String(40), nullable=False, unique=True)
     public = db.Column(db.Boolean, nullable=False, default=True)
     notes = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
@@ -43,7 +43,7 @@ class Collection(db.Model):
     __tablename__ = "collections"
 
     collection_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    collection_name = db.Column(db.String(40), nullable=False)
+    collection_name = db.Column(db.String(40), nullable=False, unique=True)
     public = db.Column(db.Boolean, nullable=False, default=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     date_created = db.Column(db.Date, nullable=False)

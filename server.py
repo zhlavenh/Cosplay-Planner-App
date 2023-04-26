@@ -54,11 +54,21 @@ def nav_login():
 
 @app.route('/characters')
 def nav_character():
-    return render_template("characters.html")
+    return render_template("characters.html", page_type="base")
+
+@app.route('/characters/<character_name>')
+def show_character_page(character_name):
+
+    return render_template("characters.html", page_type="ind_character_page")
 
 @app.route('/shows')
 def nav_show():
-    return render_template("shows.html")
+    return render_template("shows.html", page_type="base")
+
+@app.route('/shows/<show_title>')
+def show_show_page(show_title):
+    
+    return render_template("shows.html", page_type="ind_show_page")
 
 @app.route('/create/new-outfit')
 def nav_create_new_outfit_page():
@@ -85,11 +95,25 @@ def nav_create_page():
         return render_template("create.html")
 
 # api routes
-@app.route('/disp_all_anime')
+@app.route('/disp_all_anime', methods=["POST"])
 def disp_all_anime():
+    page_change = request.get_json()
+    page_number = page_change["page"]
+
     url, query, variables = crud.get_all_anime()
-    response = requests.post(url, json={'query': query, 'variables': variables})
-    return response.json()
+    variables = {"page": page_number, "perPage": 40}
+    response = requests.post(url, json={'query': query, 'variables': variables}).json()['data']['Page']
+    return response
+
+@app.route('/disp_all_characters', methods=["POST"])
+def disp_all_characters():
+    page_change = request.get_json()
+    page_number = page_change["page"]
+
+    url, query, variables = crud.get_all_characters()
+    variables = {"page": page_number, "perPage": 30}
+    response = requests.post(url, json={'query': query, 'variables': variables}).json()['data']['Page']
+    return response
 
 @app.route('/find_character', methods=["POST"])
 def disp_all_char_matches():
@@ -98,6 +122,46 @@ def disp_all_char_matches():
     url, query, variables = crud.api_find_all_character_by_name(inputName["name"])
     response = requests.post(url, json={'query': query, 'variables': variables})
     return response.json()
+
+@app.route('/find_single_character', methods=["POST"])
+def disp_character_info():
+    inputName = request.get_json()
+
+    url, query, variables = crud.api_get_single_character(inputName["name"])
+    char_info = requests.post(url, json={'query': query, 'variables': variables}).json()["data"]["Character"]
+    show_list = {}
+
+    for show in char_info["media"]["edges"]:
+        show_id = show["node"]["id"]
+        show_list[show_id] = show_list.get(show_id, {"eng_title": show["node"]["title"]["english"], 
+                                                     "native_title": show["node"]["title"]["native"], "show_img": show["node"]["coverImage"]["medium"]})
+
+    response = {"img": char_info["image"]["medium"], "eng_name": char_info["name"]["full"], "native_name": char_info["name"]["native"], 
+                "age": char_info["age"], "description": char_info["description"], "gender": char_info["gender"], "appears_in": show_list}
+
+    return response
+
+@app.route("/find_show", methods=["POST"])
+def disp_show_info():
+    show_title = request.get_json()["showName"]
+    url, query, variables = crud.api_get_single_show_by_name(show_title)
+    show_info = requests.post(url, json={'query': query, 'variables': variables}).json()["data"]["Media"]
+
+    character_dic = {}
+    for character in show_info["characters"]["edges"]:
+        character_id = character["node"]["id"]
+        character_img = character["node"]["image"]["medium"]
+        character_eng_name = character["node"]["name"]["full"]
+        character_native_name = character["node"]["name"]["native"]
+
+        character_dic[character_id] = character_dic.get(character_id, {"character_img": character_img, "character_eng_name": character_eng_name, "character_native_name": character_native_name})
+
+
+    response = {"show_info":{"show_img": show_info['coverImage']["medium"], "show_eng_title": show_info['title']['english'], "show_native_title": show_info['title']['native'], 
+                "start_date": datetime(show_info['startDate']['year'], show_info['startDate']['month'], show_info['startDate']['day']).strftime("%B/%d/%Y"), 
+                "end_date": datetime(show_info['endDate']['year'], show_info['endDate']['month'], show_info['endDate']['day']).strftime("%B/%d/%Y"), 
+                "show_description": show_info["description"], "num_episodes": show_info["episodes"]}, "characters_in_show": character_dic}
+    return response
 
 #Sessions handling
 @app.route('/handle_login', methods=['POST'])
@@ -298,7 +362,7 @@ def create_new_col():
     db.session.add(new_col)
     db.session.commit()
 
-    if form["outfitsList"] != 0:
+    if form["outfitsList"] != 0 :
         collection_id = crud.get_colleciton(form["collection_name"]).collection_id
         for outfit in form["outfitsList"]:
             outfit_id = crud.get_outfit_by_id_or_name(outfit).outfit_id

@@ -2,7 +2,11 @@
 {% block title %} All Characters {% endblock %}
 
 {% block body %}
-    <div class="container" id="characters"></div>
+{% if page_type == 'base' %}
+<div class="container" id="characters"></div>
+{% elif page_type == 'ind_character_page' %}
+<div class="container" id="ind_character_page"></div>
+{% endif %}
 {% endblock %}
 
 {% block js %}

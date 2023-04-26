@@ -262,7 +262,7 @@ function CreateNewCollection(){
             }
             setFormInfo({collection_name: collectionName, public: colllectionPublic, outfitsList: Array.from(outfitsSelected)});
 
-        } else {setFormInfo({collection_name: collectionName, public: colllectionPublic});}
+        } else {setFormInfo({collection_name: collectionName, public: colllectionPublic, outfitsList: []});}
     }
 
     React.useEffect(() => {

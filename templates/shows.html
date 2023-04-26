@@ -2,7 +2,12 @@
 {% block title %} All Shows {% endblock %}
 
 {% block body %}
+
+    {% if page_type == 'base' %}
     <div class="container" id="shows"></div>
+    {% elif page_type == 'ind_show_page' %}
+    <div class="container" id="ind_show"></div>
+    {% endif %}
 {% endblock %}
 
 {% block js %}
