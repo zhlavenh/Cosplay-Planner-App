@@ -2,7 +2,11 @@
 {% block title %} My Outfits {% endblock %}
 
 {% block body %}
+    {% if page_type == 'base' %}
     <div class="container" id="user_outfits"></div>
+    {% elif page_type == 'ind_outfit' %}
+    <div class="container" id="user_outfit"></div>
+    {% endif %}
 {% endblock %}
 
 {% block js %}

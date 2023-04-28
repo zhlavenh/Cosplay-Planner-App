@@ -81,7 +81,10 @@ def get_users_collections_by_id(user_id):
     """Get all collection objects created by user"""
     collecitons = db.session.query(Collection).filter(Collection.user_id == user_id).all()
     return collecitons
-
+def get_collection_outfit_object(outfit_id, collection_id):
+    col_out = db.session.query(Collection_outfit).filter(Collection_outfit.outfit_id == outfit_id, 
+                                                         Collection_outfit.collection_id == collection_id).first()
+    return col_out
 # Update
 def add_new_character(character_name, character_img, gender, show_id):
     """Add character to site db"""
@@ -95,11 +98,21 @@ def add_outfit_to_collection(collection_id, outfit_id):
     """"Add a single outfit to collection"""
     outfit_collection = Collection_outfit(collection_id, outfit_id)
     return outfit_collection
-def update_collection(collection_id):
+def change_outfit_name(outfit_id, new_name):
+    outfit = get_outfit_by_id_or_name(outfit_id)
+    outfit.outfit_name = new_name
+
+def change_collection_name(collection_id, new_name):
+    return None
+def change_outfit_notes(outfit_id, new_notes):
     return None
 
-
 # Delete
+
+def delete_outfit(outfit_id):
+    return None
+def delete_collection(collection_id):
+    return None
 
 # API Fucntions
 def get_all_characters():

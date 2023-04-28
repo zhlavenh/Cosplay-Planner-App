@@ -24,7 +24,7 @@ def show_homepage():
     else:
         return render_template("homepage.html")
 
-@app.route('/user_account')
+@app.route('/my-accounts')
 def nav_user_acct_name():
     
     if 'user_name' not in session["user_info"]:
@@ -32,21 +32,29 @@ def nav_user_acct_name():
     else:
         return render_template("account.html")
 
-@app.route('/user_collections')
+@app.route('/my-collections')
 def nav_user_collections():
     
     if 'user_name' not in session["user_info"]:
         return redirect('/login')
     else:
-        return render_template("collections.html")
+        return render_template("collections.html", page_type="base")
 
-@app.route('/user_outfits')
+@app.route('/my-collections/<collection_name>')
+def nav_to_collection(collection_name):
+    return render_template("collections.html", page_type="collection")
+
+@app.route('/my-outfits')
 def nav_user_outfits():
     
     if 'user_name' not in session["user_info"]:
         return redirect('/login')
     else:
-        return render_template("outfits.html")
+        return render_template("outfits.html", page_type="base")
+
+@app.route('/my-outfits/<outfit_name>')
+def nav_to_outfit(outfit_name):
+    return render_template("outfits.html", page_type="ind_outfit")
 
 @app.route('/login')
 def nav_login():
@@ -94,6 +102,7 @@ def nav_create_page():
     else:
         return render_template("create.html")
 
+# POST and GETS
 # api routes
 @app.route('/disp_all_anime', methods=["POST"])
 def disp_all_anime():
@@ -292,6 +301,42 @@ def get_user_creations():
     response = {"collection_names": collection_names, "collections_info": collecitons_info}
     return response
 
+@app.route('/get_outfit_info', methods=["POST"])
+def get_user_outfit_info():
+    outfit_name = request.get_json()["name"]
+    outfit =  crud.get_outfit_by_id_or_name(outfit_name)
+    character = crud.get_character_by_name_or_id(outfit.character_id)
+    collections = {}
+
+    for collection in outfit.collection_list:
+        collection_name = crud.get_colleciton(collection.collection_id).collection_name
+        collections[collection.collection_id] = collections.get(collection.collection_id, collection_name)
+
+    response = {"outfit_name": outfit.outfit_name, "based_on": character.character_name, "based_on_img": character.character_image_URL, 
+                "collecitons_in": collections, "notes": outfit.notes}
+
+    return response
+
+@app.route('/get_collection_info', methods=["POST"])
+def get_user_collection_info():
+    form = request.get_json()
+    print(f"*****{form}")
+    collection = crud.get_colleciton(form["name"])
+    char_list=[]
+    outfit_list = []
+
+    if collection.outfit_list != 0:
+        for outfit in collection.outfit_list:
+            outfit_list.append(outfit.outfit_name)
+            char_list.append({"char_name": crud.get_character_by_name_or_id(outfit.character_id).character_name, 
+                              "char_img": crud.get_character_by_name_or_id(outfit.character_id).character_image_URL})
+    else:
+        outfit_list.append("No Outfits in collection click the outfit tab and create a new one")
+        char_list.append("No Outfits in collection click the outfit tab and create a new one")
+
+    response = {"collection_name": form["name"], "char_list": char_list, "outfit_list": outfit_list}
+    return response
+
 @app.route('/create_new_outfit', methods=["POST"])
 def create_new():
 # Getting form infomation
@@ -372,6 +417,70 @@ def create_new_col():
     response = {"message": "successful"}
     return response
 
+@app.route('/update_outfit', methods=["POST"])
+def update_outfit():
+    form = request.get_json()
+    outfit_id = crud.get_outfit_by_id_or_name(form["current_outfit"]).outfit_id
+    response = {"message": "success"}
+
+    if form["change_name"] != None:
+        crud.change_outfit_name(outfit_id, form["change_name"])
+        db.session.commit()
+        return response
+    elif form["add_col"] != None:
+        for collection in form["add_col"]:
+            collection_id = crud.get_colleciton(collection).collection_id
+            out_col = crud.add_outfit_to_collection(collection_id, outfit_id)
+            db.session.add(out_col)
+            db.session.commit()
+        return response
+    elif form["remove_col"] != None:
+        for collection in form["remove_col"]:
+            collection_id = crud.get_colleciton(collection).collection_id
+            collection_object = crud.get_collection_outfit_object(outfit_id, collection_id)
+            db.session.delete(collection_object)
+            db.session.commit()
+        return response
+    elif form["notes"] != None:
+        crud.get_outfit_by_id_or_name(outfit_id).notes = form["notes"]
+        db.session.commit()
+        return response
+    
+    return response
+
+@app.route('/update_collection', methods=["POST"])
+def update_user_collection():
+    form = request.get_json()
+    response = {"message": "success"}
+
+    return response
+
+@app.route('/delete_creation', methods=["POST"])
+def delete_user_creation():
+    form = request.get_json()
+    response = {"message": "success"}
+
+    if form["action"] == "delete_outfit":
+        outfit = crud.get_outfit_by_id_or_name(form["outfit_name"])
+        if outfit.collection_list:
+            for col in outfit.collection_list:
+                out_col = crud.get_collection_outfit_object(outfit.outfit_id, col.collection_id)
+                db.session.delete(out_col)
+                db.session.commit()
+
+
+        db.session.delete(outfit)
+        db.session.commit()
+    elif form["action"] == "delete_collection":
+        collection = crud.get_colleciton(form["collection_name"])
+        if collection.outfit_list:
+            for outfit in collection.outfit_list:
+                out_col = crud.get_collection_outfit_object(outfit.outfit_id, collection.collection_id)
+                db.session.delete(out_col)
+                db.session.commit()
+
+
+    return response
 
 if __name__ == "__main__":
     connect_to_db(app)

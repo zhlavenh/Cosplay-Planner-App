@@ -30,7 +30,7 @@ function UserCollections(props){
             let collectionUpdated = collecInfo[index][1];
             content.push(
                         <React.Fragment>
-                            <a href="" className="d-flex flex-column justify-content-center align-items-center border border-secondary rounded m-3 p-2" style={{width: "160px", height: "150px"}}>
+                            <a href={`/my-collections`} className="d-flex flex-column justify-content-center align-items-center border border-secondary rounded m-3 p-2" style={{width: "160px", height: "150px"}}>
                                 <div className="text-wrap text-center">{collectionName}</div>
                                 <div className="">{collectionUpdated}</div>
                             </a>
@@ -57,7 +57,7 @@ function UserOutfits(props){
             let charImg = outfitInfo[index][1];
             content.push(
             <React.Fragment>
-                <a href="" className="d-flex flex-column justify-content-center align-items-center border border-secondary rounded m-3 p-2" style={{width: "160px", height: "150px"}}>
+                <a href={`/my-outfits/${encodeURIComponent(outfitName)}`} className="d-flex flex-column justify-content-center align-items-center border border-secondary rounded m-3 p-2" style={{width: "160px", height: "150px"}}>
                     <img className="row" src={charImg} style={{width: "auto", height: "60px"}}/>
                     <div className="row">{outfitName}</div>
                 </a>

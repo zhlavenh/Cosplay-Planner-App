@@ -15,11 +15,16 @@ function CreateNewCard(){
 }
 
 function CollectionCard(props){
+    function goToIndCol(evt){
+        
+        window.location = `/my-collections/${encodeURIComponent(evt.target.innerText)}`
+    }
+
     return (
-    <a className="col border border-secondary rounded m-1">
+    <div className="col border border-secondary rounded m-3">
         <div className="row">
             <div className="col-6">
-                {props.collection_name}
+                <span onClick={goToIndCol}>{props.collection_name}</span>
             </div>
             <div className="col-6">
                 {props.collection_LUPD}
@@ -33,12 +38,19 @@ function CollectionCard(props){
                 {props.collection_outfits}
             </div>
         </div>
-    </a>
+
+       
+
+    </div>
     );
 }
 
-function Display(){
+function UserCollections(){
     const [listOfCol, setListOfCol] = React.useState()
+
+    function goToPage(evt){
+        window.location = evt.target.id
+    }
 
     function displayCols(){
         let content = []
@@ -48,8 +60,8 @@ function Display(){
             let collection_characters = []
             let collection_outfits =[]
             for (let char_out in listOfCol[index]){
-                collection_characters.push(<span>{listOfCol[index][2][char_out]}</span>)
-                collection_outfits.push(<span>{listOfCol[index][3][char_out]}</span>)
+                collection_characters.push(<span onClick={goToPage} id={`/characters/${listOfCol[index][2][char_out]}`}>{listOfCol[index][2][char_out]}</span>)
+                collection_outfits.push(<span onClick={goToPage} id={`/my-outfits/${encodeURIComponent(listOfCol[index][3][char_out])}`}>{listOfCol[index][3][char_out]}</span>)
             }
 
 
@@ -66,10 +78,12 @@ function Display(){
         fetch('/user_creations')
         .then((response)=>response.json())
         .then((serverData)=>{
-            console.log(serverData.collections_info[1][2]);
             setListOfCol(serverData.collections_info);
         });
     }, []);
+
+
+
 
     return (
         <div className="container">
@@ -77,13 +91,81 @@ function Display(){
             <div className="d-flex flex-column">
                 {displayCols()}
             </div>
-            <div className="row">
+            <div className="d-flex">
                 <CreateNewCard />
             </div>
+
+   
         </div>
 
     );
 }
+function Collection(){
+    const current_collection = {name: decodeURIComponent(window.location.pathname).slice(16)};
+    const [collection_info, setCollectionInfo] = React.useState({});
 
+    React.useEffect(() => {
+        fetch('/get_collection_info', {
+            method: "POST",
+            body: JSON.stringify(current_collection),
+            headers: {'Content-Type': 'application/json',},
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+            setCollectionInfo(responseJson);
+        })
+    }, []);
 
-ReactDOM.render(<Display />, document.getElementById("user_collections"));
+    function goToCOl(evt){
+        window.location = evt.target.id;
+    }
+
+    function characterInCol(){
+        const lst = []
+        for (let index in collection_info.char_list){
+            let cur_char = collection_info.char_list[index]
+            lst.push(
+                <img onClick={goToCOl} id={`/characters/${encodeURIComponent(cur_char["char_name"])}`} src={cur_char["char_img"]}/>
+            );
+        }
+        return lst
+    }
+
+    function outfitInCol(){
+        const lst = []
+        for (let index in collection_info.outfit_list){
+            let curr_out = collection_info.outfit_list[index]
+            lst.push(
+                <div onClick={goToCOl} id={`/my-outfits/${encodeURIComponent(curr_out)}`} className="border-top border-bottom border-secondary">{curr_out}</div>
+            );
+        }
+        return lst
+    }
+
+    return(
+        <div className="container">
+            <h3 className="align-self-center">{collection_info.collection_name}</h3><br/>
+            <div className="d-flex flex-column">
+                <span>Characters in collection: </span>
+                <div className="border border-secondary rounded" style={{height: "200px"}}>
+                    {characterInCol()}
+                </div>
+            </div><br/>
+            <div className="d-flex flex-column">
+                <span>Outfits in collection: </span>
+                <div className="border border-secondary rounded overflow-auto" style={{height: "200px"}}>
+                    {outfitInCol()}
+                </div>
+            </div>
+        </div>
+    );
+}
+// Page Renders
+const currentURL = window.location.pathname;
+if (currentURL === "/my-collections"){
+    ReactDOM.render(<UserCollections />, document.getElementById("user_collections"));
+}
+else if (currentURL.startsWith("/my-collections/")){
+    ReactDOM.render(<Collection />, document.getElementById("collection"));
+}
+

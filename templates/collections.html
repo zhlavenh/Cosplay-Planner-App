@@ -2,7 +2,11 @@
 {% block title %} My Collections {% endblock %}
 
 {% block body %}
+    {% if page_type == 'base' %}
     <div class="container" id="user_collections"></div>
+    {% elif page_type == 'collection' %}
+    <div class="container" id="collection"></div>
+    {% endif %}
 {% endblock %}
 
 {% block js %}

@@ -133,7 +133,7 @@ function Display(){
             }
             else{
 
-                window.location.href = "/user_account";
+                window.location.href = "/my-accounts";
             }
 
         });

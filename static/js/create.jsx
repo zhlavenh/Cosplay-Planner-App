@@ -61,8 +61,7 @@ function OutfitForm(){
 
         .then((response)=>response.json())
         .then((responseJSON)=>{
-            // alert(responseJSON.message);
-            window.location.href = "/user_outfits"
+            window.location.href = "/my-outfits"
         });
     }, [formInfo]);
 
@@ -92,7 +91,7 @@ function OutfitForm(){
             <div className="d-flex row">
                 <div className="d-flex flex-column col form-group" >
                     <label htmlFor="outfitName">Add Outfit Notes:</label>
-                    <textarea class="form-control" rows="4" id="outfit_notes" placeholder="Outfit notes..."></textarea>
+                    <textarea className="form-control" rows="4" id="outfit_notes" placeholder="Outfit notes..."></textarea>
                 </div>
             </div><br/>
             <div className="d-flex row justify-content-between" id="userForm">
@@ -283,7 +282,7 @@ function CreateNewCollection(){
 
         .then((response)=>response.json())
         .then((responseJSON)=>{
-            window.location.href = "/user_collections";
+            window.location.href = "/my-collections";
         });
     }, [formInfo]);
 

@@ -8,7 +8,7 @@ function Header(){
     function loggedIn(evt){
         if (!isLoggedIn){
             window.location.href = "/login";
-        } else {window.location.href = "/user_account";}
+        } else {window.location.href = "/my-accounts";}
     }
 
     React.useEffect(()=>{
@@ -26,9 +26,9 @@ function Header(){
             <div className="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
                 <div className="navbar-nav">
                 <button className="nav-item nav-link" onClick={loggedIn} style={{border: "none", background: "none"}}>Login</button>
-                <a className="nav-item nav-link" href="/user_account">My Account</a>
-                <a className="nav-item nav-link" href="/user_collections">Collections</a>
-                <a className="nav-item nav-link" href="/user_outfits">Outfits</a>
+                <a className="nav-item nav-link" href="/my-accounts">My Account</a>
+                <a className="nav-item nav-link" href="/my-collections">Collections</a>
+                <a className="nav-item nav-link" href="/my-outfits">Outfits</a>
                 </div>
             </div>
         </nav>
