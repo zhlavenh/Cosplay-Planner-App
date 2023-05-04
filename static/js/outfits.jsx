@@ -16,11 +16,11 @@ function CreateNewCard(){
 
 function OutfitCard(props){
     return(
-            <div className="col-md-auto col-sm-1 mb-1">
-                <div className="card" style={{width: '10rem', height: '160px'}}>
+            <div className="col-md-auto col-sm-1 mb-1 ">
+                <div className="card outfit-card" style={{width: '10rem', height: '160px'}}>
                     <div className="card-body d-flex flex-column align-items-center justify-content-center">
                         <img className="card-img-top" src={props.charImg} alt="show_title" style={{width: "auto", height: "60px"}}/>
-                        <p className="card-title">{props.outfitName}</p>
+                        <p className="card-title text-dark">{props.outfitName}</p>
                         <a href={`/my-outfits/${encodeURIComponent(props.outfitName)}`} className="btn btn-primary">Click to open</a>
                     </div>
                 </div>
@@ -53,9 +53,9 @@ function AllUserOutfits(){
 
 
     return (
-        <div className="container">
+        <div className="container vh-100">
             <h1>Welcome to your outfits page</h1>
-            <div className="row">
+            <div className="row ">
                 <CreateNewCard />
                 {displayOutfits()}
             </div>

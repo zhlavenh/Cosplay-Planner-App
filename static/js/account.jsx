@@ -1,10 +1,10 @@
-function getUserCreations(){
-    const [userCreations, setUserCreations] = React.useState({userOutfits: {}, userCollections: {}});
+// function getUserCreations(){
+//     const [userCreations, setUserCreations] = React.useState({userOutfits: {}, userCollections: {}});
 
-    // React.useEffect(()=>{
-    //     fetch(/)
-    // });
-}
+//     // React.useEffect(()=>{
+//     //     fetch(/)
+//     // });
+// }
 
 function UserInfo(props){
 
@@ -28,13 +28,19 @@ function UserCollections(props){
         for (const index in collecInfo){
             let collectionName = collecInfo[index][0];
             let collectionUpdated = collecInfo[index][1];
+            let isActive = ""
+            if (index == 0){
+                isActive = "active"
+            }
+
             content.push(
-                        <React.Fragment>
-                            <a href={`/my-collections`} className="d-flex flex-column justify-content-center align-items-center border border-secondary rounded m-3 p-2" style={{width: "160px", height: "150px"}}>
-                                <div className="text-wrap text-center">{collectionName}</div>
-                                <div className="">{collectionUpdated}</div>
-                            </a>
-                        </React.Fragment>
+                <div className={`carousel-item ${isActive}`} >
+                    <a href={`/my-collections`}className="d-flex flex-column justify-content-center align-items-center border border-secondary rounded w-100"  style={{aspectRatio: "1/1"}}>
+                        <div className="text-wrap text-center">{collectionName}</div>
+                        <div className="">{collectionUpdated}</div>
+                    </a>
+                </div>
+
     );
         }
         
@@ -42,9 +48,9 @@ function UserCollections(props){
     }
     
     return(
-        <div className="d-flex justify-content-start flex-wrap" >
+        <React.Fragment >
             {displayCollection()}
-        </div>
+        </React.Fragment>
     );
 }
 function UserOutfits(props){
@@ -55,23 +61,29 @@ function UserOutfits(props){
         for (const index in outfitInfo){
             let outfitName = outfitInfo[index][0];
             let charImg = outfitInfo[index][1];
+            let isActive = ""
+            if (index == 0){
+                isActive = "active"
+            }
+
             content.push(
-            <React.Fragment>
-                <a href={`/my-outfits/${encodeURIComponent(outfitName)}`} className="d-flex flex-column justify-content-center align-items-center border border-secondary rounded m-3 p-2" style={{width: "160px", height: "150px"}}>
-                    <img className="row" src={charImg} style={{width: "auto", height: "60px"}}/>
-                    <div className="row">{outfitName}</div>
-                </a>
-            </React.Fragment>
+                <div className={`carousel-item ${isActive}`} >
+                    <a href={`/my-outfits/${encodeURIComponent(outfitName)}`} className="d-flex justify-content-evenly align-items-center border border-secondary rounded w-100" style={{aspectRatio: "1/1"}}>
+                        <img className="h-75 w-auto m-4" src={charImg}/>
+                        <div className="me-4">{outfitName}</div>
+                    </a>
+                </div>
             );
+
         }
         
         return content;
     }
     
     return(
-        <div className="d-flex justify-content-start flex-wrap" >
+        <React.Fragment>
             {displayOutfit()}
-        </div>
+        </React.Fragment>
     );
 }
 
@@ -90,17 +102,41 @@ function Display(){
     }, []);
 
     return (
-        <div className="row">
+        <div className="row p-2">
             <div className="col-3 p-2" style={{height: "250px"}}><UserInfo user_name={userInfo.user_name} member_since={userInfo.member_since} count_collect={userInfo.count_collect} count_outfits={userInfo.count_outfits}/></div>
             <div className="col-9 p-2" >
-                <div className="d-flex flex-column" style={{height: screen.height}}>
-                    <h6>Your collections</h6>
-                    <div className="overflow-auto h-50 p-2 mb-1">
-                        <UserCollections collecInfo={userInfo.collecInfo}/>
+                <div className="d-flex justify-content-between" style={{height: screen.height}}>
+                    <div className="w-50 d-flex flex-column m-2">
+                        <h6>Your collections</h6>
+                        <div className="carousel slide align-self-center w-100" id="collection-carousel" data-bs-ride="carousel" >
+                            <div className="carousel-inner" >
+                                <UserCollections collecInfo={userInfo.collecInfo}/>
+                            </div>
+                            <button className="carousel-control-prev" type="button" data-bs-target="#collection-carousel" data-bs-slide="prev">
+                                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span className="visually-hidden">Previous</span>
+                            </button>
+                            <button className="carousel-control-next" type="button" data-bs-target="#collection-carousel" data-bs-slide="next">
+                                <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span className="visually-hidden">Next</span>
+                            </button>
+                        </div>
                     </div>
-                    <h6>Your outfits</h6>
-                    <div className="overflow-auto h-50 p-2">
-                        <UserOutfits outfitInfo={userInfo.outfitInfo}/>
+                    <div className="w-50 d-flex flex-column m-2">
+                        <h6>Your outfits</h6>
+                        <div className="carousel slide align-self-center w-100" id="outfit-carousel" data-bs-ride="carousel">
+                            <div className="carousel-inner">
+                                <UserOutfits outfitInfo={userInfo.outfitInfo}/>
+                            </div>
+                            <button className="carousel-control-prev" type="button" data-bs-target="#outfit-carousel" data-bs-slide="prev">
+                                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span className="visually-hidden">Previous</span>
+                            </button>
+                            <button className="carousel-control-next" type="button" data-bs-target="#outfit-carousel" data-bs-slide="next">
+                                <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span className="visually-hidden">Next</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 

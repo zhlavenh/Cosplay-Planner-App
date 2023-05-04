@@ -219,8 +219,8 @@ function SearchCharacterName(){
 function CreateNewOutfit(){
 
     return (
-        <div className="row">
-            <button href='/create/new-collection'>Click here to create a new collection Instead</button>
+        <div className="vh-100">
+            <h1>Create a new outfit here</h1>
             <OutfitForm/>
         </div>
     );
@@ -288,8 +288,8 @@ function CreateNewCollection(){
 
 
     return(
-        <div>
-            <h1>This is the create new collection page</h1>
+        <div className="vh-100">
+            <h1>Create a new collection here</h1>
             <form id="collecitonForm">
                 <div className="d-flex justify-content-between row">
                     <div className="col-6 form-group">

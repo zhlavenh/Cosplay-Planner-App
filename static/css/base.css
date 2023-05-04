@@ -1,0 +1,17 @@
+.navbar, body .container{
+    background-color: #01020D;
+    color: white;
+}
+
+
+.navbar, .navbar-brand, .nav-item{
+    color: white;
+    font-family: 'Overpass', sans-serif;
+    cursor: pointer;
+}
+
+body {
+    background-image: url(https://e0.pxfuel.com/wallpapers/165/504/desktop-wallpaper-city-anime-girl-alone-anime-girl-alone-light.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}

@@ -49,15 +49,15 @@ function ExistUserForm(props){
     return(
         <React.Fragment>
         <br/>
-        <h1 className="d-flex justify-content-center">Welcome Back!</h1>
+        <h1 className="d-flex justify-content-center text-light">Welcome Back!</h1>
         <br/>
         <div className="row">
             <div className="form-group col">
-                <label htmlFor="user_name">Username/Email</label>
+                <label htmlFor="user_name" className="text-light">Username/Email</label>
                 <input type="text" className="form-control" placeholder="Username/Email" id="user_name" name="user_name" onChange={props.updateInputs}/>
             </div>
             <div className="form-group col">
-                <label htmlFor="password">Password</label>
+                <label htmlFor="password" className="text-light">Password</label>
                 <input type="text" className="form-control" placeholder="Password" id="password" name="password" onChange={props.updateInputs}/>
             </div>
         </div>
@@ -71,16 +71,16 @@ function UserRedir(props){
 
     return(
         <React.Fragment>
-            <div className="d-flex justify-content-center">
-                <button type="button" className="create_acct" style={{background: 'none', border: 'none'}}>Forgot User Name?</button>
-                <button type="button" className="create_acct" style={{background: 'none', border: 'none'}}>Forgot Password?</button>
+            <div className="d-flex justify-content-center text-light">
+                <button type="button" className="create_acct text-light" style={{background: 'none', border: 'none'}}>Forgot User Name?</button>
+                <button type="button" className="create_acct text-light" style={{background: 'none', border: 'none'}}>Forgot Password?</button>
             </div><br/>
-            <div className="d-flex justify-content-center userStatusForm">
+            <div className="d-flex justify-content-center userStatusForm text-light">
                 <p style={{margin: "0em"}}>{props.prompt.introText}</p>
                 <button type="button" onClick={props.changeText} className="create_acct" style={{background: 'none', border: 'none'}}>{props.prompt.buttonText}</button>
             </div><br/>
-            <div className="d-flex justify-content-center">
-                <button className="btn btn-outline-primary" id={props.prompt.status} type="" onClick={props.getFormInputs}>{props.prompt.status}</button>
+            <div className="d-flex justify-content-center text-light">
+                <button className="btn btn-outline-primary text-light" id={props.prompt.status} type="" onClick={props.getFormInputs}>{props.prompt.status}</button>
             </div>
         </React.Fragment>
 
@@ -142,7 +142,7 @@ function Display(){
 
 
     return(
-        <form action="/handle_login" method="POST">
+        <form className="vh-100" action="/handle_login" method="POST">
             {prompt.currentform}
             <UserRedir changeText={changeText} prompt={prompt} getFormInputs={getFormInputs}/>
         </form>
