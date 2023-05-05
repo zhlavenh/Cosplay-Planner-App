@@ -5,12 +5,12 @@ function CreateNewCard(){
     }    
     return(
         <React.Fragment>
-            <div className="col card-box m-3 create-new" onClick={goTo} style={{padding: 'auto 12px'}}>
+            <div className="col card-box m-1 create-new h-25" onClick={goTo} style={{padding: 'auto 12px'}}>
 
                 <div className="d-flex align-items-center justify-content-center" >
-                    <div className="btn d-flex flex-column align-items-center justify-content-center" style={{width: '50%', height: '50%'}} >
+                    <div className="btn d-flex flex-column align-items-center justify-content-center" >
                         <h5 style={{color: "white", textDecoration: "none"}}>Create a new collection</h5>
-                        <i className="bi bi-plus-circle" style={{fontSize: '60px', color: "white"}}></i>
+                        <i className="bi bi-plus-circle" style={{fontSize: '50px', color: "white"}}></i>
                     </div>   
                 </div>
 
@@ -101,7 +101,7 @@ function UserCollections(){
 
                 <CreateNewCard />
             </div>
-            <div className="d-flex flex-column overflow-auto h-50" data-bs-toggle="tooltip" 
+            <div className="d-flex flex-column overflow-auto h-50 my-3" data-bs-toggle="tooltip" 
             data-bs-placement="top" title="Scroll to see more collections">
                 {displayCols()}
             </div>

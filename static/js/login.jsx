@@ -76,11 +76,11 @@ function UserRedir(props){
                 <button type="button" className="create_acct text-light" style={{background: 'none', border: 'none'}}>Forgot Password?</button>
             </div><br/>
             <div className="d-flex justify-content-center userStatusForm text-light">
-                <p style={{margin: "0em"}}>{props.prompt.introText}</p>
+                <p className="create_acct" style={{margin: "0em"}}>{props.prompt.introText}</p>
                 <button type="button" onClick={props.changeText} className="create_acct" style={{background: 'none', border: 'none'}}>{props.prompt.buttonText}</button>
             </div><br/>
             <div className="d-flex justify-content-center text-light">
-                <button className="btn btn-outline-primary text-light" id={props.prompt.status} type="" onClick={props.getFormInputs}>{props.prompt.status}</button>
+                <button className="btn btn-outline-primary text-light create-acct" id={props.prompt.status} type="" onClick={props.getFormInputs}>{props.prompt.status}</button>
             </div>
         </React.Fragment>
 
