@@ -2,8 +2,7 @@
 
 Cosplay Planner is a web application where a user with an acount can create outfits themed after Anime characters. Notes can be added to each outfit so that a user can document what items they plan on using. Collections of these outfits can be complied and viewed to aid in planning for events such as cons. The app uses Anilist api to display information on shows and the character within them. Any user can browse the anime information to get inspiration for their future cosplays.
 
-![Homepage](Home-page-img)
-![Outift](outfit-page-img)
+![Homepage](static/images/Homepage.png)
 
 ## Table of Contents
 - [Technologies](#Technologies)
@@ -60,7 +59,15 @@ When you create a new outfit or colleciton you have the option to make either pu
 
 ## <a name="version2.0"/>Version 2.0
 #### Planned improvements
+* Imporove repsonsive displays for smaller screens
+
 #### Features to come
+* Deployment of site
+* Addition of data visualization on populatiry of characters
+* Recover account after forgotten user name or password
+* A display of random users public outfits and collections on homepage
+* Implement Amazon and Etsy APIs to add item links to outfits
+
 
 ## <a name="Developer"/>About the Developer
 Cosplay Planner was created by Zee H. Lavenhouse. It was created as a capstone project for Hackbright Academy's Full Stack Software Engineering program.
