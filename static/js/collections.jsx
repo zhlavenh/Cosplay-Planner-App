@@ -1,15 +1,20 @@
 function CreateNewCard(){
+
+    function goTo(){
+        window.location.href = "/create/new-collection";
+    }    
     return(
         <React.Fragment>
-            <a className="col border border-secondary rounded m-1" role="button" href="/create/new-collection">
-                <div className="" style={{padding: 'auto 12px'}}>
-                    <div className="d-flex align-items-center justify-content-center" >
-                        <div className="btn d-flex align-items-center justify-content-center" style={{width: '50%', height: '50%'}} >
-                            <i className="bi bi-plus-circle" style={{fontSize: '60px'}}></i>
-                        </div>   
-                    </div>
+            <div className="col border border-secondary rounded m-1 create-new" onClick={goTo} style={{padding: 'auto 12px'}}>
+
+                <div className="d-flex align-items-center justify-content-center" >
+                    <div className="btn d-flex flex-column align-items-center justify-content-center" style={{width: '50%', height: '50%'}} >
+                        <h5 style={{color: "white", textDecoration: "none"}}>Create a new collection</h5>
+                        <i className="bi bi-plus-circle" style={{fontSize: '60px', color: "white"}}></i>
+                    </div>   
                 </div>
-            </a>
+
+            </div>
         </React.Fragment>
     );
 }
@@ -87,19 +92,22 @@ function UserCollections(){
 
     return (
         <div className="container">
-        <h1>Welcome to your collections page</h1>
+            
+            <div className="d-flex header-div justify-content-between">
+                <h1 className="align-self-center">Welcome to your collections page</h1><br/>
+                <CreateNewCard />
+            </div>
             <div className="d-flex flex-column">
                 {displayCols()}
             </div>
             <div className="d-flex">
                 <CreateNewCard />
             </div>
-
-   
         </div>
 
     );
 }
+
 function Collection(){
     const current_collection = {name: decodeURIComponent(window.location.pathname).slice(16)};
     const [collection_info, setCollectionInfo] = React.useState({});

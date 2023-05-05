@@ -1,0 +1,32 @@
+.collect-card, .outfit-card {
+    border: 5px ridge #8DE8F2;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.car-boxes h6 {
+    font-size: 3rem;
+    color: #49A3F2;
+    font-family: 'Shrikhand', cursive;
+    text-align: center;
+    text-shadow: 4px 4px 2px #472C59;
+}
+
+.welcome-text h3{
+    writing-mode: vertical-lr;
+    font-family: 'Shrikhand', cursive;
+    font-size: 3rem;
+    letter-spacing: 4px;
+    line-height: 6px;
+    color: #49A3F2;
+    text-shadow: 4px 4px 2px #472C59;
+}
+
+.user-info h6{
+    font-size: 1.5rem;
+}
+
+.out-name, .collect-card {
+    font-size: 1.5rem;
+    color: white;
+}

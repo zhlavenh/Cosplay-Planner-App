@@ -28,6 +28,7 @@ function UserCollections(props){
         for (const index in collecInfo){
             let collectionName = collecInfo[index][0];
             let collectionUpdated = collecInfo[index][1];
+            let num_out = collecInfo[index][2];
             let isActive = ""
             if (index == 0){
                 isActive = "active"
@@ -35,9 +36,10 @@ function UserCollections(props){
 
             content.push(
                 <div className={`carousel-item ${isActive}`} >
-                    <a href={`/my-collections`}className="d-flex flex-column justify-content-center align-items-center border border-secondary rounded w-100"  style={{aspectRatio: "1/1"}}>
-                        <div className="text-wrap text-center">{collectionName}</div>
-                        <div className="">{collectionUpdated}</div>
+                    <a href={`/my-collections`}className="d-flex flex-column justify-content-center align-items-center collect-card w-100"  style={{aspectRatio: "1/1"}}>
+                        <div className="text-wrap text-center">{collectionName}</div><br/>
+                        <div className="">Last Edited On: {collectionUpdated}</div><br/>
+                        <div className="">Number of Outfits: {num_out}</div>
                     </a>
                 </div>
 
@@ -61,6 +63,7 @@ function UserOutfits(props){
         for (const index in outfitInfo){
             let outfitName = outfitInfo[index][0];
             let charImg = outfitInfo[index][1];
+
             let isActive = ""
             if (index == 0){
                 isActive = "active"
@@ -68,9 +71,10 @@ function UserOutfits(props){
 
             content.push(
                 <div className={`carousel-item ${isActive}`} >
-                    <a href={`/my-outfits/${encodeURIComponent(outfitName)}`} className="d-flex justify-content-evenly align-items-center border border-secondary rounded w-100" style={{aspectRatio: "1/1"}}>
-                        <img className="h-75 w-auto m-4" src={charImg}/>
-                        <div className="me-4">{outfitName}</div>
+                    <a href={`/my-outfits/${encodeURIComponent(outfitName)}`} className="d-flex justify-content-evenly align-items-center outfit-card w-100" style={{aspectRatio: "1/1"}}>
+                        <img className="h-50 w-auto m-4" src={charImg}/>
+                        <div className="me-4 out-name">{outfitName}</div>
+
                     </a>
                 </div>
             );
@@ -103,9 +107,9 @@ function Display(){
 
     return (
         <div className="row p-2">
-            <div className="col-3 p-2" style={{height: "250px"}}><UserInfo user_name={userInfo.user_name} member_since={userInfo.member_since} count_collect={userInfo.count_collect} count_outfits={userInfo.count_outfits}/></div>
+            <div className="col-2 p-2 user-info" style={{height: "250px"}}><UserInfo user_name={userInfo.user_name} member_since={userInfo.member_since} count_collect={userInfo.count_collect} count_outfits={userInfo.count_outfits}/></div>
             <div className="col-9 p-2" >
-                <div className="d-flex justify-content-between" style={{height: screen.height}}>
+                <div className="d-flex justify-content-between  car-boxes" style={{height: screen.height}}>
                     <div className="w-50 d-flex flex-column m-2">
                         <h6>Your collections</h6>
                         <div className="carousel slide align-self-center w-100" id="collection-carousel" data-bs-ride="carousel" >
@@ -141,6 +145,7 @@ function Display(){
                 </div>
 
             </div>
+            <div className="col-1 welcome-text mt-4 pt-2"><h3>WELCOME BACK!</h3></div>
         </div>
 
     );

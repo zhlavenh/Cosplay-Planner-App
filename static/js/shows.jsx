@@ -73,8 +73,11 @@ function AllShows(){
 
     return (
         <div className="container">
-            <h1>This is a page for all shows</h1>
-
+            <h1>All Animes</h1>
+            <div className="d-flex justify-content-between">
+                <button id="previousPage" onClick={changePage}>Go to previous page</button>
+                <button id="nextPage" onClick={changePage}>Go to next page</button>
+            </div>
             <div className="d-flex justify-content-between flex-wrap">
                 {displayAnime()}
             </div><br/>

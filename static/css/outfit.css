@@ -1,0 +1,37 @@
+label {
+    color: black;
+}
+.modal-header{
+    color: black;
+}
+
+.out-header {
+    color: #49A3F2;
+    font-family: 'Shrikhand', cursive;
+    font-size: 4rem;
+    text-shadow: 4px 4px 8px #082040;
+}
+
+.card {
+    width: 15rem;
+    height: 15rem;
+    background-color: #8DE8F2;
+    border: 5px ridge #092C73; 
+}
+.outfit-card p{
+    font-size: 1.5rem;
+}
+.out-btn {
+    width: 150px;
+    height: 40px;
+    border: 2px solid #092C73;
+    background-color: #092C73;
+    color: white;
+    font-family: 'Gilda Display', serif;
+    text-decoration: none;
+
+}
+
+.notes-block, .collect-text{
+    font-size: 1.25rem;
+}

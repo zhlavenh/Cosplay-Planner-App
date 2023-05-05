@@ -3,13 +3,20 @@
     height: 15rem;
     background: #092C73;
     justify-content: center;
+    border: 5px ridge #8DE8F2;
+    border-radius: 5px;
 
 }
 
 .welcome-text{
-    width: 600px
+    width: 600px;
+    font-family: 'Gilda Display', serif;
+    font-size: 1.5rem;
 }
 
-.card-group{
-
+h1 {
+    font-family: 'Shrikhand', cursive;
+    font-size: 4rem;
+    color: #49A3F2;
+    text-shadow: 4px 4px 2px #472C59;
 }

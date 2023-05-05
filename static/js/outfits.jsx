@@ -2,7 +2,7 @@ function CreateNewCard(){
     return(
         <React.Fragment>
             <div className="col-md-auto col-sm-1 mb-1">
-                <div className="card" style={{width: '10rem', height: '160px', padding: 'auto 12px'}}>
+                <div className="card" style={{padding: 'auto 12px'}}>
                     <div className="card-body d-flex align-items-center justify-content-center" >
                         <a role="button" className="btn d-flex align-items-center justify-content-center" style={{width: '50%', height: '50%'}} href="/create/new-outfit">
                             <i className="bi bi-plus-circle" style={{fontSize: '60px'}}></i>
@@ -17,11 +17,11 @@ function CreateNewCard(){
 function OutfitCard(props){
     return(
             <div className="col-md-auto col-sm-1 mb-1 ">
-                <div className="card outfit-card" style={{width: '10rem', height: '160px'}}>
-                    <div className="card-body d-flex flex-column align-items-center justify-content-center">
-                        <img className="card-img-top" src={props.charImg} alt="show_title" style={{width: "auto", height: "60px"}}/>
+                <div className="card outfit-card" >
+                    <div className="card-body d-flex flex-column align-items-center justify-content-between h-100">
+                        <img className="card-img-top" src={props.charImg} alt="show_title" style={{width: "auto", height: "50%"}}/>
                         <p className="card-title text-dark">{props.outfitName}</p>
-                        <a href={`/my-outfits/${encodeURIComponent(props.outfitName)}`} className="btn btn-primary">Click to open</a>
+                        <a href={`/my-outfits/${encodeURIComponent(props.outfitName)}`} className="out-btn d-flex align-items-center justify-content-center">View Outfit</a>
                     </div>
                 </div>
             </div>
@@ -53,8 +53,8 @@ function AllUserOutfits(){
 
 
     return (
-        <div className="container vh-100">
-            <h1>Welcome to your outfits page</h1>
+        <div className="vh-100 d-flex flex-column">
+            <h1 className="align-self-center out-header">Welcome to your outfits page</h1><br/>
             <div className="row ">
                 <CreateNewCard />
                 {displayOutfits()}
@@ -103,7 +103,7 @@ function IndOutfit(){
         
         for (let index in outfitInfo["collecitons_in"]){
             let currCol = outfitInfo["collecitons_in"][index];
-            colList.push(<div onClick={goToCOl} id={"/my-collections"} className="border-top border-bottom border-secondary">{currCol}</div>);
+            colList.push(<div onClick={goToCOl} id={"/my-collections"} className="border-top border-bottom border-secondary collect-text">{currCol}</div>);
         }
 
         return colList
@@ -201,7 +201,7 @@ function IndOutfit(){
     }, [updateInfo]);
 
     return (
-        <div className="contatiner">
+        <div className="vh-100 p-3">
             <div className="d-flex">
                 <img src={outfitInfo.based_on_img} style={{height: "300px", width: "200px"}}/>
                 <div className="d-flex flex-column w-100 p-2 justify-content-between">
@@ -229,7 +229,7 @@ function IndOutfit(){
                     <button className="btn btn-secondary m-2" data-bs-toggle="modal" data-bs-target="#updateNotes">Edit outfit notes</button>
                 </div>
 
-                <div className="border border-secondary rounded overflow-auto" style={{height: "200px"}}>{outfitInfo.notes}</div>
+                <div className="border border-secondary rounded overflow-auto notes-block" style={{height: "200px"}}>{outfitInfo.notes}</div>
             </div><br/><br/>
             <div>
                 <button className="border border-secondary rounded bg-danger text-white" data-bs-toggle="modal" data-bs-target="#deleteOutfit">Delete Outfit</button>
@@ -242,6 +242,7 @@ function IndOutfit(){
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
+                            <h5 class="modal-title">Change outfit name</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">

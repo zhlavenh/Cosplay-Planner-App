@@ -288,8 +288,8 @@ function CreateNewCollection(){
 
 
     return(
-        <div className="vh-100">
-            <h1>Create a new collection here</h1>
+        <div className="vh-100 d-flex flex-column">
+            <h1 className="align-self-center">Create a new collection here</h1><br/>
             <form id="collecitonForm">
                 <div className="d-flex justify-content-between row">
                     <div className="col-6 form-group">

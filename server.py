@@ -110,7 +110,7 @@ def disp_all_anime():
     page_number = page_change["page"]
 
     url, query, variables = crud.get_all_anime()
-    variables = {"page": page_number, "perPage": 40}
+    variables = {"page": page_number, "perPage": 20}
     response = requests.post(url, json={'query': query, 'variables': variables}).json()['data']['Page']
     return response
 
@@ -120,7 +120,7 @@ def disp_all_characters():
     page_number = page_change["page"]
 
     url, query, variables = crud.get_all_characters()
-    variables = {"page": page_number, "perPage": 30}
+    variables = {"page": page_number, "perPage": 9}
     response = requests.post(url, json={'query': query, 'variables': variables}).json()['data']['Page']
     return response
 
@@ -264,7 +264,7 @@ def get_acct_info():
         outfitInfo.append((outfit.outfit_name, outfitCharImg))
     
     for collection in collections:
-        collectionInfo.append((collection.collection_name, collection.last_updated.strftime("%B %d, %Y")))
+        collectionInfo.append((collection.collection_name, collection.last_updated.strftime("%B %d, %Y"), len(collection.outfit_list)))
         
     account_info = {"user_name": user.user_name, "date_created": (user.date_created).strftime("%b %d, %Y"), 
                     "count_outfits": len(outfits) , "count_collect": len(collections), "collectionInfo": collectionInfo, "outfitInfo": outfitInfo}

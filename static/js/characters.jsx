@@ -93,6 +93,10 @@ function Characters(){
 
     return (
         <React.Fragment>
+        <div className="d-flex justify-content-between">
+            <button id="previousPage" onClick={changePage}>Go to previous page</button>
+            <button id="nextPage" onClick={changePage}>Go to next page</button>
+        </div>
         <div className="d-flex justify-content-between flex-wrap">
             {showCharInfo()}
         </div><br/>
