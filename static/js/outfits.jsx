@@ -103,7 +103,7 @@ function IndOutfit(){
         
         for (let index in outfitInfo["collecitons_in"]){
             let currCol = outfitInfo["collecitons_in"][index];
-            colList.push(<div onClick={goToCOl} id={"/my-collections"} className="border-top border-bottom border-secondary collect-text">{currCol}</div>);
+            colList.push(<div onClick={goToCOl} id={"/my-collections"} className="border-top border-bottom border-secondary collect-text" style={{cursor: "pointer"}}>{currCol}</div>);
         }
 
         return colList
@@ -218,20 +218,20 @@ function IndOutfit(){
                             <button className="btn btn-secondary m-2" data-bs-toggle="modal" data-bs-target="#updateCollectionAdd">Add to collections</button>
                             <button className="btn btn-secondary m-2" data-bs-toggle="modal" data-bs-target="#updateCollectionDelete">Delete from collections</button>
                         </div>
-                        <div className="border border-secondary rounded overflow-auto" style={{height: "100px"}}>{collectionList()}</div>
+                        <div className="border border-secondary rounded overflow-auto" data-bs-toggle="tooltip" data-bs-placement="top" title="Click on collection to go to collections" style={{height: "100px"}}>{collectionList()}</div>
                     </div>
                 </div>
             </div>
             {/* Notes */}
             <div className="d-flex flex-column">
                 <div className="d-flex justify-content-between">
-                    <span className="d-flex align-items-end">Notes: </span>
+                    <span className="d-flex align-items-end"><h3>Notes: </h3></span>
                     <button className="btn btn-secondary m-2" data-bs-toggle="modal" data-bs-target="#updateNotes">Edit outfit notes</button>
                 </div>
 
                 <div className="border border-secondary rounded overflow-auto notes-block" style={{height: "200px"}}>{outfitInfo.notes}</div>
             </div><br/><br/>
-            <div>
+            <div data-bs-toggle="tooltip" data-bs-placement="top" title="Deleting is Permanent">
                 <button className="border border-secondary rounded bg-danger text-white" data-bs-toggle="modal" data-bs-target="#deleteOutfit">Delete Outfit</button>
             </div>
 
@@ -245,7 +245,7 @@ function IndOutfit(){
                             <h5 class="modal-title">Change outfit name</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div className="modal-body">
+                        <div className="modal-body" >
                             <form>
                                 <div className="input-group">
                                     <label className="m-1">New Outfit Name: </label>
@@ -269,7 +269,7 @@ function IndOutfit(){
                             <h5>Add outfit to colletions</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div className="modal-body">
+                        <div className="modal-body" data-bs-toggle="tooltip" data-bs-placement="top" title="Hold shift to select multiple collections">
                             <form id="add_collections">
                                 {collLabel()}
                             </form>
@@ -289,7 +289,7 @@ function IndOutfit(){
                             <h5>Remove outfit from colletions</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div className="modal-body">
+                        <div className="modal-body" data-bs-toggle="tooltip" data-bs-placement="top" title="Hold shift to select multiple collections">
                             <form id="delete_collections">
                                 {Object.values(outfitInfo["collecitons_in"]).map((name) => 
                                     <div className="form-check">

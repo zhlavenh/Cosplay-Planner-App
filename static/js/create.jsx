@@ -206,7 +206,7 @@ function SearchCharacterName(){
 
     return (
         <div>
-            <input type="text" className="input-group form-control" placeholder="Search.." id="character_name" onKeyUp={filterFunction} defaultValue=""></input>
+            <input type="text" className="input-group form-control" placeholder="Search.." id="character_name" onInput={filterFunction} defaultValue=""></input>
             <menu className="p-0">
                 {isDropDown ? dropDown() : false}
             </menu>

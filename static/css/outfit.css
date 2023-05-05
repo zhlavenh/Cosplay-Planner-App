@@ -1,7 +1,7 @@
 label {
     color: black;
 }
-.modal-header{
+.modal-header, .modal-body{
     color: black;
 }
 

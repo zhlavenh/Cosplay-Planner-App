@@ -1,0 +1,39 @@
+.boxes {
+    height: 200px;
+    padding: 10px;
+    border: 10px ridge white;
+    border-radius: 5px;
+    font-size: 1.5rem;
+}
+
+.box-photo {
+    height: 80%;
+    width: auto;
+    cursor: pointer;
+}
+
+.box-heads {
+    font-size: 1.5rem;
+}
+
+h3 { 
+    text-align: center;
+    font-family: 'Shrikhand', cursive;
+    font-size: 4rem;
+    color: #49A3F2;
+    text-shadow: 4px 4px 2px #472C59;
+}
+
+.card-box {
+    border: 5px ridge white;
+    border-radius: 5px;
+}
+
+.ind-col {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.line-sp {
+    cursor: pointer;
+}

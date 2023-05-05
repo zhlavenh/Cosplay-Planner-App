@@ -5,7 +5,7 @@ function CreateNewCard(){
     }    
     return(
         <React.Fragment>
-            <div className="col border border-secondary rounded m-1 create-new" onClick={goTo} style={{padding: 'auto 12px'}}>
+            <div className="col card-box m-3 create-new" onClick={goTo} style={{padding: 'auto 12px'}}>
 
                 <div className="d-flex align-items-center justify-content-center" >
                     <div className="btn d-flex flex-column align-items-center justify-content-center" style={{width: '50%', height: '50%'}} >
@@ -26,20 +26,18 @@ function CollectionCard(props){
     }
 
     return (
-    <div className="col border border-secondary rounded m-3">
-        <div className="row">
-            <div className="col-6">
-                <span onClick={goToIndCol}>{props.collection_name}</span>
-            </div>
-            <div className="col-6">
-                {props.collection_LUPD}
-            </div>
+    <div className="col card-box m-3 p-3">
+        <div className="d-flex justify-content-around m-2">
+            <span onClick={goToIndCol} className="card-box ind-col p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Click to open collection">{props.collection_name}</span>
+            <h6>Collection Last Updated: {props.collection_LUPD}</h6>
         </div>
         <div className="row d-flex justify-content-evenly" style={{height: "100px"}}>
-            <div className="d-flex flex-column col-5 border border-secondary rounded m-1" >
+            <div className="d-flex flex-column col-5 card-box m-1" >
+                <span>Characters in collection: </span>
                 {props.collection_characters}
             </div>
-            <div className="d-flex flex-column col-5 border border-secondary rounded m-1">
+            <div className="d-flex flex-column col-5 card-box m-1">
+                <span>Outifts in collection: </span>
                 {props.collection_outfits}
             </div>
         </div>
@@ -65,8 +63,8 @@ function UserCollections(){
             let collection_characters = []
             let collection_outfits =[]
             for (let char_out in listOfCol[index]){
-                collection_characters.push(<span onClick={goToPage} id={`/characters/${listOfCol[index][2][char_out]}`}>{listOfCol[index][2][char_out]}</span>)
-                collection_outfits.push(<span onClick={goToPage} id={`/my-outfits/${encodeURIComponent(listOfCol[index][3][char_out])}`}>{listOfCol[index][3][char_out]}</span>)
+                collection_characters.push(<span onClick={goToPage} id={`/characters/${listOfCol[index][2][char_out]}`} className="line-sp">{listOfCol[index][2][char_out]}</span>)
+                collection_outfits.push(<span onClick={goToPage} id={`/my-outfits/${encodeURIComponent(listOfCol[index][3][char_out])}`} className="line-sp">{listOfCol[index][3][char_out]}</span>)
             }
 
 
@@ -91,13 +89,20 @@ function UserCollections(){
 
 
     return (
-        <div className="container">
+        <div className="vh-100">
             
             <div className="d-flex header-div justify-content-between">
-                <h1 className="align-self-center">Welcome to your collections page</h1><br/>
+                <div className="d-flex flex-column justify-content-center">
+                    <h1 className="align-self-center">Welcome to your collections page</h1>
+                    <p>
+                        Click on a character, collection, or outfit name to go to their page.
+                    </p>
+                </div>
+
                 <CreateNewCard />
             </div>
-            <div className="d-flex flex-column">
+            <div className="d-flex flex-column overflow-auto h-50" data-bs-toggle="tooltip" 
+            data-bs-placement="top" title="Scroll to see more collections">
                 {displayCols()}
             </div>
             <div className="d-flex">
@@ -133,7 +138,7 @@ function Collection(){
         for (let index in collection_info.char_list){
             let cur_char = collection_info.char_list[index]
             lst.push(
-                <img onClick={goToCOl} id={`/characters/${encodeURIComponent(cur_char["char_name"])}`} src={cur_char["char_img"]}/>
+                <img onClick={goToCOl} className="m-2 box-photo" data-bs-toggle="tooltip" data-bs-placement="top" title="Click to go to character page" id={`/characters/${encodeURIComponent(cur_char["char_name"])}`} src={cur_char["char_img"]}/>
             );
         }
         return lst
@@ -144,24 +149,24 @@ function Collection(){
         for (let index in collection_info.outfit_list){
             let curr_out = collection_info.outfit_list[index]
             lst.push(
-                <div onClick={goToCOl} id={`/my-outfits/${encodeURIComponent(curr_out)}`} className="border-top border-bottom border-secondary">{curr_out}</div>
+                <div onClick={goToCOl} id={`/my-outfits/${encodeURIComponent(curr_out)}`} className="border-top border-bottom border-secondary d-flex justify-content-center" data-bs-toggle="tooltip" data-bs-placement="top" title="Click to go to outfit page" style={{cursor: "pointer"}}>{curr_out}</div>
             );
         }
         return lst
     }
 
     return(
-        <div className="container">
-            <h3 className="align-self-center">{collection_info.collection_name}</h3><br/>
+        <div className="vh-100">
+            <h3 className="align-self-center m-1">{collection_info.collection_name}</h3>
             <div className="d-flex flex-column">
-                <span>Characters in collection: </span>
-                <div className="border border-secondary rounded" style={{height: "200px"}}>
+                <span className="box-heads">Characters in collection: </span>
+                <div className="boxes d-flex align-items-center">
                     {characterInCol()}
                 </div>
             </div><br/>
             <div className="d-flex flex-column">
-                <span>Outfits in collection: </span>
-                <div className="border border-secondary rounded overflow-auto" style={{height: "200px"}}>
+                <span className="box-heads">Outfits in collection: </span>
+                <div className="boxes p-0 overflow-auto" >
                     {outfitInCol()}
                 </div>
             </div>
