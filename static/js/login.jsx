@@ -20,12 +20,12 @@ function NewUserForm(props){
 
         <div className="form-group">
             <label htmlFor="email" htmlform="email">Email:</label>
-            <input type="text" className="form-control" placeholder="Sample@email.com" id="email" name="email" onChange={props.updateInputs}/>
+            <input type="text" className="form-control" placeholder="Sample@email.com" id="email" name="email" onChange={props.updateInputs} data-bs-toggle="tooltip" data-bs-placement="top" title="case-senstive"/>
         </div>
 
         <div className="form-group">
             <label htmlFor="user_name" htmlform="user_name">Username:</label>
-            <input type="text" className="form-control" placeholder="Username" id="user_name" name="user_name" onChange={props.updateInputs}/>
+            <input type="text" className="form-control" placeholder="Username" id="user_name" name="user_name" onChange={props.updateInputs} data-bs-toggle="tooltip" data-bs-placement="top" title="case-senstive"/>
         </div>
 
         <div className="row">
@@ -53,12 +53,12 @@ function ExistUserForm(props){
         <br/>
         <div className="row">
             <div className="form-group col">
-                <label htmlFor="user_name" className="text-light">Username/Email</label>
-                <input type="text" className="form-control" placeholder="Username/Email" id="user_name" name="user_name" onChange={props.updateInputs}/>
+                <label htmlFor="user_name" className="text-light" >Username/Email</label>
+                <input type="text" className="form-control" placeholder="Username/Email" id="user_name" name="user_name" onChange={props.updateInputs} data-bs-toggle="tooltip" data-bs-placement="top" title="case-senstive"/>
             </div>
             <div className="form-group col">
-                <label htmlFor="password" className="text-light">Password</label>
-                <input type="text" className="form-control" placeholder="Password" id="password" name="password" onChange={props.updateInputs}/>
+                <label htmlFor="password" className="text-light" >Password</label>
+                <input type="text" className="form-control" placeholder="Password" id="password" name="password" onChange={props.updateInputs} data-bs-toggle="tooltip" data-bs-placement="top" title="case-senstive"/>
             </div>
         </div>
         <br/> 

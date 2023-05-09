@@ -293,7 +293,7 @@ function CreateNewCollection(){
             <form id="collecitonForm">
                 <div className="d-flex justify-content-between row">
                     <div className="col-6 form-group">
-                        <label htmlFor="collectionName">Outfit name</label>
+                        <label htmlFor="collectionName">Collection name</label>
                         <input type="" className="form-control" id="collectionName" placeholder="Name of collection..."/>
                     </div>
                     <div className="d-flex flex-column col-6 form-group">
@@ -309,7 +309,7 @@ function CreateNewCollection(){
                 </div><br/>
                 <div className="d-flex row">
                     {showOutfitList ? 
-                        (<select className="form-select" multiple id="outfitdropdownlist" style={{height: "100px"}}>
+                        (<select className="form-select" multiple id="outfitdropdownlist" data-bs-toggle="tooltip" data-bs-placement="top" title="Hold shift to add multiple outfits" style={{height: "100px"}}>
                                 {outfitList()}
                         </select>)
                         : false}

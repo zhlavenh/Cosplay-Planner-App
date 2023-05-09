@@ -165,10 +165,14 @@ def disp_show_info():
 
         character_dic[character_id] = character_dic.get(character_id, {"character_img": character_img, "character_eng_name": character_eng_name, "character_native_name": character_native_name})
 
+    if show_info['endDate']['year'] == None: 
+        endDate = "--/--/----"
+    else:
+        endDate = datetime(show_info['endDate']['year'], show_info['endDate']['month'], show_info['endDate']['day']).strftime("%B/%d/%Y")
 
     response = {"show_info":{"show_img": show_info['coverImage']["medium"], "show_eng_title": show_info['title']['english'], "show_native_title": show_info['title']['native'], 
                 "start_date": datetime(show_info['startDate']['year'], show_info['startDate']['month'], show_info['startDate']['day']).strftime("%B/%d/%Y"), 
-                "end_date": datetime(show_info['endDate']['year'], show_info['endDate']['month'], show_info['endDate']['day']).strftime("%B/%d/%Y"), 
+                "end_date": endDate, 
                 "show_description": show_info["description"], "num_episodes": show_info["episodes"]}, "characters_in_show": character_dic}
     return response
 
